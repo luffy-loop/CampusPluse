@@ -22,7 +22,6 @@ DISABLE_DB = os.getenv("DISABLE_DB", "false").lower() == "true"
 mock_complaints = {}
 mock_complaint_counter = 1
 
-UPLOAD_FOLDER = Path(app.root_path) / "uploads"
 
 import os
 from pathlib import Path
@@ -487,11 +486,26 @@ def create_complaint():
 
         # -----------------------------
         # AI ANALYSIS
+               # -----------------------------
+        # AI ANALYSIS
         # -----------------------------
 
-        analysis = analyze_complaint(
-            description
-        )
+        try:
+            analysis = analyze_complaint(description)
+
+        except Exception as ai_error:
+            print("Gemini AI analysis failed:", ai_error)
+
+            # Fallback analysis when Gemini quota/API is unavailable
+            analysis = {
+                "category": "Other",
+                "department": "General Administration",
+                "location": "Unknown",
+                "severity": 5,
+                "priority": "Medium",
+                "issue": description[:100],
+                "recommended_action": "Review and assign this complaint manually."
+            }
 
 
         # -----------------------------
