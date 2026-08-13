@@ -85,9 +85,12 @@ async function loadDashboard() {
         // Complaints
         // -------------------------
 
-        renderComplaints(
-            data.complaints
-        );
+        console.log("DASHBOARD COMPLAINTS:", data.complaints);
+console.log("FULL DASHBOARD RESPONSE:", data);
+
+renderComplaints(
+    data.complaints || []
+);
 
         await loadCampusSignals();
 

@@ -785,44 +785,6 @@ def admin_dashboard():
 
             })
 
-        rows = cursor.fetchall()
-
-
-        complaints = []
-
-        for row in rows:
-
-            complaints.append({
-
-                "id": row[0],
-
-                "uni_roll_no": row[1],
-
-                "description": row[2],
-
-                "category": row[3],
-
-                "department": row[4],
-
-                "location": row[5],
-
-                "severity": row[6],
-
-                "priority": row[7],
-
-                "status": row[8],
-
-"created_at": (
-    row[9].strftime("%d %b %Y, %I:%M %p")
-    if row[9]
-    else None
-),
-
-"evidence_path": row[10]
-
-            })
-
-
         return jsonify({
 
             "success": True,
@@ -946,6 +908,132 @@ def update_complaint_status(complaint_id):
 def track():
 
     return render_template("track.html")
+
+# ============================================================
+# STUDENT COMPLAINTS BY ROLL NUMBER
+# ============================================================
+
+@app.route("/api/complaints", methods=["GET"])
+def get_student_complaints():
+
+    conn = None
+    cursor = None
+
+    try:
+
+        uni_roll_no = request.args.get("uni_roll_no")
+
+        if not uni_roll_no:
+
+            return jsonify({
+                "success": False,
+                "error": "University roll number is required."
+            }), 400
+
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+
+        cursor.execute("""
+            SELECT
+                id,
+                description,
+                category,
+                department,
+                location,
+                severity,
+                priority,
+                issue_group,
+                recommended_action,
+                status,
+                created_at,
+                updated_at
+            FROM complaints
+            WHERE uni_roll_no = %s
+            ORDER BY created_at DESC;
+        """, (uni_roll_no,))
+
+
+        rows = cursor.fetchall()
+
+
+        complaints = []
+
+
+        for row in rows:
+
+            complaints.append({
+
+                "id": row[0],
+
+                "description": row[1],
+
+                "category": row[2],
+
+                "department": row[3],
+
+                "location": row[4],
+
+                "severity": row[5],
+
+                "priority": row[6],
+
+                "issue": row[7],
+
+                "recommended_action": row[8],
+
+                "status": row[9],
+
+                "created_at": (
+                    row[10].strftime(
+                        "%d %b %Y, %I:%M %p"
+                    )
+                    if row[10]
+                    else None
+                ),
+
+                "updated_at": (
+                    row[11].strftime(
+                        "%d %b %Y, %I:%M %p"
+                    )
+                    if row[11]
+                    else None
+                )
+
+            })
+
+
+        return jsonify({
+
+            "success": True,
+
+            "complaints": complaints,
+
+            "count": len(complaints)
+
+        })
+
+
+    except Exception as e:
+
+        return jsonify({
+
+            "success": False,
+
+            "error": str(e)
+
+        }), 500
+
+
+    finally:
+
+        if cursor:
+            cursor.close()
+
+        if conn:
+            conn.close()
+
 
 
 @app.route("/api/complaints/<int:complaint_id>")

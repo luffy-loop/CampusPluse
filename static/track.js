@@ -1,8 +1,8 @@
-const trackBtn =
-    document.getElementById("trackBtn");
+const rollNoInput =
+    document.getElementById("rollNo");
 
-const complaintId =
-    document.getElementById("complaintId");
+const searchBtn =
+    document.getElementById("searchBtn");
 
 const message =
     document.getElementById("message");
@@ -11,57 +11,58 @@ const complaintResult =
     document.getElementById("complaintResult");
 
 
-trackBtn.addEventListener(
+searchBtn.addEventListener(
     "click",
-    trackComplaint
+    loadComplaint
 );
 
 
-complaintId.addEventListener(
+rollNoInput.addEventListener(
     "keydown",
     function (event) {
 
         if (event.key === "Enter") {
-            trackComplaint();
+            loadComplaint();
         }
 
     }
 );
 
 
-async function trackComplaint() {
+async function loadComplaint() {
 
-    const id =
-        complaintId.value.trim();
+    const rollNo =
+        rollNoInput.value.trim();
 
-
-    if (!id) {
-
-        message.className = "message error";
-
-        message.innerText =
-            "Enter a complaint ID.";
-
-        complaintResult.style.display = "none";
-
-        return;
-    }
-
-
-    trackBtn.disabled = true;
-
-    trackBtn.innerText = "Searching...";
 
     message.innerText = "";
 
     complaintResult.style.display = "none";
 
 
+    if (!rollNo) {
+
+        message.className =
+            "message error";
+
+        message.innerText =
+            "Please enter your university roll number.";
+
+        return;
+    }
+
+
+    searchBtn.disabled = true;
+
+    searchBtn.innerText =
+        "Searching...";
+
+
     try {
 
         const response =
             await fetch(
-                `/api/complaints/${id}`
+                `/api/complaints?uni_roll_no=${encodeURIComponent(rollNo)}`
             );
 
 
@@ -69,21 +70,56 @@ async function trackComplaint() {
             await response.json();
 
 
-        if (!data.success) {
+        console.log(
+            "TRACK RESPONSE:",
+            data
+        );
+
+
+        if (!response.ok || !data.success) {
 
             throw new Error(
-                data.error
+                data.error ||
+                "Unable to find complaints."
             );
 
         }
 
 
-        renderComplaint(
-            data.complaint
+        /*
+         * The API may return multiple complaints.
+         * For now we display the most recent one.
+         */
+
+        const complaints =
+            data.complaints || [];
+
+
+        if (!complaints.length) {
+
+            throw new Error(
+                "No complaints found for this roll number."
+            );
+
+        }
+
+
+        const complaint =
+            complaints[0];
+
+
+        displayComplaint(
+            complaint
         );
 
 
     } catch (error) {
+
+        console.error(
+            "Tracking error:",
+            error
+        );
+
 
         message.className =
             "message error";
@@ -94,225 +130,198 @@ async function trackComplaint() {
     }
 
 
-    trackBtn.disabled = false;
+    searchBtn.disabled = false;
 
-    trackBtn.innerText =
+    searchBtn.innerText =
         "Track Complaint";
 }
 
 
-function renderComplaint(complaint) {
+function displayComplaint(
+    complaint
+) {
 
-    const status =
-        complaint.status || "Pending";
-
-
-    const pendingClass =
-        "status-step " +
-        (
-            status === "Pending"
-                ? "active"
-                : status === "In Progress" ||
-                  status === "Resolved"
-                    ? "complete"
-                    : ""
-        );
+    message.className =
+        "message";
 
 
-    const progressClass =
-        "status-step " +
-        (
-            status === "In Progress"
-                ? "active"
-                : status === "Resolved"
-                    ? "complete"
-                    : ""
-        );
-
-
-    const resolvedClass =
-        "status-step " +
-        (
-            status === "Resolved"
-                ? "complete"
-                : ""
-        );
-
-
-    complaintResult.innerHTML = `
-
-        <div class="result-header">
-
-            <h2>
-                Complaint Status
-            </h2>
-
-            <span class="complaint-id">
-                #${complaint.id}
-            </span>
-
-        </div>
-
-
-        <div class="status-track">
-
-            <div class="${pendingClass}">
-                Submitted
-            </div>
-
-            <div class="${progressClass}">
-                In Progress
-            </div>
-
-            <div class="${resolvedClass}">
-                Resolved
-            </div>
-
-        </div>
-
-
-        <div class="details-grid">
-
-            <div class="detail">
-
-                <span>
-                    Category
-                </span>
-
-                <strong>
-                    ${escapeHtml(
-                        complaint.category
-                    )}
-                </strong>
-
-            </div>
-
-
-            <div class="detail">
-
-                <span>
-                    Department
-                </span>
-
-                <strong>
-                    ${escapeHtml(
-                        complaint.department
-                    )}
-                </strong>
-
-            </div>
-
-
-            <div class="detail">
-
-                <span>
-                    Location
-                </span>
-
-                <strong>
-                    ${escapeHtml(
-                        complaint.location
-                    )}
-                </strong>
-
-            </div>
-
-
-            <div class="detail">
-
-                <span>
-                    Priority
-                </span>
-
-                <strong>
-                    ${escapeHtml(
-                        complaint.priority
-                    )}
-                </strong>
-
-            </div>
-
-
-            <div class="detail">
-
-                <span>
-                    Severity
-                </span>
-
-                <strong>
-                    ${complaint.severity}/10
-                </strong>
-
-            </div>
-
-
-            <div class="detail">
-
-                <span>
-                    Submitted
-                </span>
-
-                <strong>
-                    ${escapeHtml(
-                        complaint.created_at
-                    )}
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <div class="recommendation">
-
-            <span>
-                Issue
-            </span>
-
-            <p>
-                ${escapeHtml(
-                    complaint.issue
-                )}
-            </p>
-
-        </div>
-
-
-        <div class="recommendation">
-
-            <span>
-                Recommended Action
-            </span>
-
-            <p>
-                ${escapeHtml(
-                    complaint.recommended_action
-                )}
-            </p>
-
-        </div>
-
-    `;
+    message.innerText =
+        "Complaint found.";
 
 
     complaintResult.style.display =
         "block";
+
+
+    document.getElementById(
+        "complaintId"
+    ).innerText =
+        `#${complaint.id}`;
+
+
+    document.getElementById(
+        "issue"
+    ).innerText =
+        complaint.issue ||
+        complaint.description ||
+        "—";
+
+
+    document.getElementById(
+        "category"
+    ).innerText =
+        complaint.category ||
+        "—";
+
+
+    document.getElementById(
+        "department"
+    ).innerText =
+        complaint.department ||
+        "—";
+
+
+    document.getElementById(
+        "location"
+    ).innerText =
+        complaint.location ||
+        "—";
+
+
+    document.getElementById(
+        "priority"
+    ).innerText =
+        complaint.priority ||
+        "—";
+
+
+    document.getElementById(
+        "updatedAt"
+    ).innerText =
+        formatDate(
+            complaint.updated_at
+        );
+
+
+    document.getElementById(
+        "recommendationText"
+    ).innerText =
+        complaint.recommended_action ||
+        "No recommendation available.";
+
+
+    updateStatus(
+        complaint.status
+    );
 }
 
 
-function escapeHtml(value) {
+function updateStatus(
+    status
+) {
 
-    if (
-        value === null ||
-        value === undefined
-    ) {
-        return "";
+    const pending =
+        document.getElementById(
+            "statusPending"
+        );
+
+    const progress =
+        document.getElementById(
+            "statusProgress"
+        );
+
+    const resolved =
+        document.getElementById(
+            "statusResolved"
+        );
+
+
+    pending.className =
+        "status-step";
+
+
+    progress.className =
+        "status-step";
+
+
+    resolved.className =
+        "status-step";
+
+
+    const current =
+        String(status || "")
+            .toLowerCase()
+            .replace("_", " ");
+
+
+    if (current === "pending") {
+
+        pending.classList.add(
+            "active"
+        );
+
     }
 
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+
+    else if (
+        current === "in progress"
+    ) {
+
+        pending.classList.add(
+            "complete"
+        );
+
+        progress.classList.add(
+            "active"
+        );
+
+    }
+
+
+    else if (
+        current === "resolved"
+    ) {
+
+        pending.classList.add(
+            "complete"
+        );
+
+        progress.classList.add(
+            "complete"
+        );
+
+        resolved.classList.add(
+            "complete"
+        );
+
+    }
+
+}
+
+
+function formatDate(
+    value
+) {
+
+    if (!value) {
+        return "—";
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return value;
+
+    }
+
+
+    return date.toLocaleString();
 }
