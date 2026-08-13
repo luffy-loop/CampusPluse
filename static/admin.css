@@ -4835,3 +4835,183 @@ tbody tr:hover {
     }
 
 }
+
+/* =========================
+   RESPONSIVE DASHBOARD
+   ========================= */
+
+@media (max-width: 1100px) {
+
+    .sidebar {
+        width: 220px;
+    }
+
+    .main {
+        margin-left: 220px;
+        width: calc(100% - 220px);
+        padding: 28px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .signals-list {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================
+   TABLET
+   ========================= */
+
+@media (max-width: 800px) {
+
+    .sidebar {
+        width: 190px;
+        padding: 22px 14px;
+    }
+
+    .main {
+        margin-left: 190px;
+        width: calc(100% - 190px);
+        padding: 22px;
+    }
+
+    .brand h2 {
+        font-size: 15px;
+    }
+
+    .brand span {
+        font-size: 9px;
+    }
+
+    nav a {
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .topbar {
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .refresh-btn {
+        width: 100%;
+    }
+
+    .briefing-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 600px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    .dashboard {
+        display: block;
+    }
+
+    .sidebar {
+        position: relative;
+
+        width: 100%;
+        min-height: auto;
+
+        padding: 16px 18px;
+
+        border-right: none;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .brand {
+        margin-bottom: 15px;
+    }
+
+    nav {
+        flex-direction: row;
+
+        overflow-x: auto;
+
+        gap: 6px;
+    }
+
+    nav a {
+        flex-shrink: 0;
+    }
+
+    .sidebar-bottom {
+        display: none;
+    }
+
+    .main {
+        margin-left: 0;
+
+        width: 100%;
+
+        padding: 18px 14px;
+    }
+
+    .topbar h1 {
+        font-size: 27px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card strong {
+        font-size: 27px;
+    }
+
+    .panel {
+        border-radius: 15px;
+    }
+
+    .panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .briefing-headline {
+        flex-direction: column;
+    }
+
+    .signals-list {
+        grid-template-columns: 1fr;
+    }
+
+    .signal-meta {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .complaint-filters {
+        flex-direction: column;
+    }
+
+    .complaint-filters select,
+    .clear-filter-btn {
+        width: 100%;
+    }
+
+    .table-wrapper {
+        margin-left: -2px;
+        margin-right: -2px;
+    }
+
+}

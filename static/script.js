@@ -413,3 +413,190 @@ if (evidenceInput) {
     });
 
 }
+
+// ============================================================
+// MY COMPLAINTS
+// ============================================================
+
+const loadComplaintsBtn =
+    document.getElementById("loadComplaintsBtn");
+
+const myComplaintsList =
+    document.getElementById("myComplaintsList");
+
+
+function getMiniStatusClass(status) {
+
+    if (status === "Resolved") {
+        return "mini-resolved";
+    }
+
+    if (status === "In Progress") {
+        return "mini-progress";
+    }
+
+    return "mini-pending";
+}
+
+
+async function loadMyComplaints() {
+
+    const rollNo =
+        document.getElementById("rollNo").value.trim();
+
+
+    if (!rollNo) {
+
+        myComplaintsList.innerHTML = `
+            <div class="empty-complaints">
+
+                <strong>
+                    Enter your university roll number
+                </strong>
+
+                <p>
+                    Your roll number is required to load your complaints.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    loadComplaintsBtn.innerText =
+        "Loading...";
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/complaints?uni_roll_no=${encodeURIComponent(rollNo)}`
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+            throw new Error(data.error);
+        }
+
+
+        if (!data.complaints.length) {
+
+            myComplaintsList.innerHTML = `
+                <div class="empty-complaints">
+
+                    <strong>
+                        No complaints found
+                    </strong>
+
+                    <p>
+                        No complaints are associated with this roll number yet.
+                    </p>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        myComplaintsList.innerHTML =
+            data.complaints.map(
+                complaint => {
+
+                    const statusClass =
+                        getMiniStatusClass(
+                            complaint.status
+                        );
+
+
+                    return `
+                        <div class="complaint-mini-card">
+
+                            <div class="mini-id">
+                                #${complaint.id}
+                            </div>
+
+                            <div>
+
+                                <div class="mini-description">
+                                    ${escapeHtml(
+                                        complaint.description
+                                    )}
+                                </div>
+
+                                <div class="mini-meta">
+
+                                    ${escapeHtml(
+                                        complaint.category ||
+                                        "Uncategorized"
+                                    )}
+
+                                    •
+
+                                    ${escapeHtml(
+                                        complaint.location ||
+                                        "Location unavailable"
+                                    )}
+
+                                </div>
+
+                            </div>
+
+                            <span
+                                class="mini-status ${statusClass}"
+                            >
+                                ${escapeHtml(
+                                    complaint.status
+                                )}
+                            </span>
+
+                        </div>
+                    `;
+
+                }
+            ).join("");
+
+
+    } catch (error) {
+
+        console.error(
+            "My complaints error:",
+            error
+        );
+
+
+        myComplaintsList.innerHTML = `
+            <div class="empty-complaints">
+
+                <strong>
+                    Unable to load complaints
+                </strong>
+
+                <p>
+                    Please try again.
+                </p>
+
+            </div>
+        `;
+
+    } finally {
+
+        loadComplaintsBtn.innerText =
+            "View My Complaints";
+
+    }
+
+}
+
+
+loadComplaintsBtn.addEventListener(
+    "click",
+    loadMyComplaints
+);
