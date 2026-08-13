@@ -68,14 +68,13 @@ client = genai.Client(
 def get_db_connection():
     if DISABLE_DB:
         raise Exception("Database is disabled for testing/deployment.")
-    
-    return psycopg2.connect(
-        host=os.getenv("DB_HOST"),
-        port=os.getenv("DB_PORT"),
-        database=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD")
-    )
+
+    database_url = os.getenv("DATABASE_URL")
+
+    if not database_url:
+        raise Exception("DATABASE_URL is not configured.")
+
+    return psycopg2.connect(database_url)
 
 
 # ============================================================
