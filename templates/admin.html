@@ -330,7 +330,84 @@
 
 
                 <div class="table-wrapper">
+                                    <!-- COMPLAINT FILTERS -->
 
+                <div class="complaint-filters">
+
+                    <div class="filter-search">
+
+                        <input
+                            type="text"
+                            id="complaintSearch"
+                            placeholder="Search complaints..."
+                        >
+
+                    </div>
+
+
+                    <select id="categoryFilter">
+
+                        <option value="">
+                            All Categories
+                        </option>
+
+                        <option value="IT & Network">
+                            IT & Network
+                        </option>
+
+                        <option value="Infrastructure">
+                            Infrastructure
+                        </option>
+
+                        <option value="Hostel">
+                            Hostel
+                        </option>
+
+                        <option value="Laboratory">
+                            Laboratory
+                        </option>
+
+                        <option value="Maintenance">
+                            Maintenance
+                        </option>
+
+                        <option value="Cleanliness">
+                            Cleanliness
+                        </option>
+
+                    </select>
+
+
+                    <select id="statusFilter">
+
+                        <option value="">
+                            All Statuses
+                        </option>
+
+                        <option value="Pending">
+                            Pending
+                        </option>
+
+                        <option value="In Progress">
+                            In Progress
+                        </option>
+
+                        <option value="Resolved">
+                            Resolved
+                        </option>
+
+                    </select>
+
+
+                    <button
+                        type="button"
+                        id="clearFilters"
+                        class="clear-filter-btn"
+                    >
+                        Clear
+                    </button>
+
+                </div>
                     <table>
 
                         <thead>
@@ -382,9 +459,7 @@
     </div>
 
 
-    <script
-       <script src="{{ url_for('static', filename='admin.js') }}?v=2"></script>
-    ></script>
+    <script src="{{ url_for('static', filename='admin.js') }}?v=3"></script>
 
 </body>
 

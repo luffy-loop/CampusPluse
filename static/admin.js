@@ -85,11 +85,23 @@ async function loadDashboard() {
         // Complaints
         // -------------------------
 
-        console.log("DASHBOARD COMPLAINTS:", data.complaints);
-console.log("FULL DASHBOARD RESPONSE:", data);
+        console.log(
+    "DASHBOARD COMPLAINTS:",
+    data.complaints
+);
+
+console.log(
+    "FULL DASHBOARD RESPONSE:",
+    data
+);
+
+
+allComplaints =
+    data.complaints || [];
+
 
 renderComplaints(
-    data.complaints || []
+    allComplaints
 );
 
         await loadCampusSignals();
@@ -326,6 +338,158 @@ function renderComplaints(complaints) {
         }).join("");
 }
 
+// ============================================================
+// COMPLAINT SEARCH + FILTERS
+// ============================================================
+
+const complaintSearch =
+    document.getElementById("complaintSearch");
+
+const categoryFilter =
+    document.getElementById("categoryFilter");
+
+const statusFilter =
+    document.getElementById("statusFilter");
+
+const clearFilters =
+    document.getElementById("clearFilters");
+
+
+let allComplaints = [];
+
+
+function setupComplaintFilters() {
+
+    if (complaintSearch) {
+
+        complaintSearch.addEventListener(
+            "input",
+            applyComplaintFilters
+        );
+
+    }
+
+
+    if (categoryFilter) {
+
+        categoryFilter.addEventListener(
+            "change",
+            applyComplaintFilters
+        );
+
+    }
+
+
+    if (statusFilter) {
+
+        statusFilter.addEventListener(
+            "change",
+            applyComplaintFilters
+        );
+
+    }
+
+
+    if (clearFilters) {
+
+        clearFilters.addEventListener(
+            "click",
+            function () {
+
+                complaintSearch.value = "";
+
+                categoryFilter.value = "";
+
+                statusFilter.value = "";
+
+                renderComplaints(
+                    allComplaints
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+function applyComplaintFilters() {
+
+    const search =
+        complaintSearch.value
+            .trim()
+            .toLowerCase();
+
+
+    const category =
+        categoryFilter.value;
+
+
+    const status =
+        statusFilter.value;
+
+
+    const filtered =
+        allComplaints.filter(
+            complaint => {
+
+                const searchableText = [
+
+                    complaint.id,
+
+                    complaint.uni_roll_no,
+
+                    complaint.description,
+
+                    complaint.category,
+
+                    complaint.department,
+
+                    complaint.location,
+
+                    complaint.priority,
+
+                    complaint.status
+
+                ]
+                    .filter(Boolean)
+                    .join(" ")
+                    .toLowerCase();
+
+
+                const matchesSearch =
+                    !search ||
+                    searchableText.includes(
+                        search
+                    );
+
+
+                const matchesCategory =
+                    !category ||
+                    complaint.category === category;
+
+
+                const matchesStatus =
+                    !status ||
+                    complaint.status === status;
+
+
+                return (
+                    matchesSearch &&
+                    matchesCategory &&
+                    matchesStatus
+                );
+
+            }
+        );
+
+
+    renderComplaints(
+        filtered
+    );
+
+}
 
 function priorityBadge(priority) {
 
@@ -409,6 +573,8 @@ refreshBtn.addEventListener(
     loadDashboard
 );
 
+
+setupComplaintFilters();
 
 loadDashboard();
 
