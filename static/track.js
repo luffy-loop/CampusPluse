@@ -62,7 +62,7 @@ async function loadComplaint() {
 
         const response =
             await fetch(
-                `/api/complaints?uni_roll_no=${encodeURIComponent(rollNo)}`
+                `https://campuspluse-z1ih.onrender.com/api/complaints?uni_roll_no=${encodeURIComponent(rollNo)}`
             );
 
 

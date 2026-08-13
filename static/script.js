@@ -114,7 +114,8 @@ form.addEventListener("submit", async function (event) {
         // --------------------------------
 
         const response = await fetch(
-            "/api/complaints",
+
+            "https://campuspluse-z1ih.onrender.com/api/complaints",
             {
                 method: "POST",
                 body: formData
@@ -473,7 +474,7 @@ async function loadMyComplaints() {
 
         const response =
             await fetch(
-                `/api/complaints?uni_roll_no=${encodeURIComponent(rollNo)}`
+                    `https://campuspluse-z1ih.onrender.com/api/complaints?uni_roll_no=${encodeURIComponent(rollNo)}`
             );
 
 

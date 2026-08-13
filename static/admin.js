@@ -36,20 +36,17 @@ async function loadDashboard() {
 
     refreshBtn.innerText = "Refreshing...";
 
-    try {
+   try {
 
-        const response =
-            await fetch("/api/admin/dashboard");
+    const response =
+        await fetch("https://campuspluse-z1ih.onrender.com/api/admin/dashboard");
 
-        const data =
-            await response.json();
+    const data =
+        await response.json();
 
-
-        if (!data.success) {
-
-            throw new Error(data.error);
-
-        }
+    if (!data.success) {
+        throw new Error(data.error);
+    }
 
 
         // -------------------------
@@ -582,20 +579,20 @@ async function updateComplaintStatus(complaintId, newStatus) {
 
     try {
 
-        const response = await fetch(
-            `/api/admin/complaints/${complaintId}/status`,
-            {
-                method: "PUT",
+       const response = await fetch(
+    `https://campuspluse-z1ih.onrender.com/api/admin/complaints/${complaintId}/status`,
+    {
+        method: "PUT",
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+        headers: {
+            "Content-Type": "application/json"
+        },
 
-                body: JSON.stringify({
-                    status: newStatus
-                })
-            }
-        );
+        body: JSON.stringify({
+            status: newStatus
+        })
+    }
+);
 
         const data = await response.json();
 
@@ -621,16 +618,15 @@ async function loadCampusSignals() {
 
     try {
 
-        const response =
-            await fetch("/api/admin/signals");
+    const response =
+        await fetch("https://campuspluse-z1ih.onrender.com/api/admin/signals");
 
-        const data =
-            await response.json();
+    const data =
+        await response.json();
 
-
-        if (!data.success) {
-            throw new Error(data.error);
-        }
+    if (!data.success) {
+        throw new Error(data.error);
+    }
 
 
         renderCampusSignals(
@@ -819,15 +815,15 @@ async function loadAIBriefing() {
 
     try {
 
-        const response =
-            await fetch("/api/admin/briefing");
+    const response =
+        await fetch("https://campuspluse-z1ih.onrender.com/api/admin/briefing");
 
-        const data =
-            await response.json();
+    const data =
+        await response.json();
 
-        if (!data.success) {
-            throw new Error(data.error);
-        }
+    if (!data.success) {
+        throw new Error(data.error);
+    }
 
         renderAIBriefing(
             data.briefing
@@ -954,8 +950,8 @@ async function loadComplaintSLA(complaintId) {
     try {
 
         const response = await fetch(
-            `/api/admin/complaints/${complaintId}/sla`
-        );
+    `https://campuspluse-z1ih.onrender.com/api/admin/complaints/${complaintId}/sla`
+);
 
         const data = await response.json();
 
