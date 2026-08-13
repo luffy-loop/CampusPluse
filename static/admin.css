@@ -1,0 +1,3739 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            #e9e7ff,
+            transparent 30%
+        ),
+        #f5f7fb;
+
+    color: #172033;
+}
+
+
+/* =========================
+   LAYOUT
+   ========================= */
+
+.dashboard {
+    min-height: 100vh;
+
+    display: flex;
+}
+
+
+/* =========================
+   SIDEBAR
+   ========================= */
+
+.sidebar {
+    width: 255px;
+
+    min-height: 100vh;
+
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    padding: 28px 22px;
+
+    background: rgba(255, 255, 255, 0.86);
+
+    border-right: 1px solid #e5e7eb;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.brand {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    margin-bottom: 50px;
+}
+
+
+.brand-mark {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 12px;
+
+    background: #5146e5;
+
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 800;
+}
+
+
+.brand h2 {
+    font-size: 17px;
+}
+
+
+.brand span {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 11px;
+
+    color: #7b8496;
+}
+
+
+nav {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+nav a {
+    text-decoration: none;
+
+    color: #667085;
+
+    padding: 12px 14px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+nav a:hover,
+nav a.active {
+    background: #f0efff;
+
+    color: #5146e5;
+}
+
+
+.sidebar-bottom {
+    margin-top: auto;
+
+    color: #98a2b3;
+
+    font-size: 12px;
+}
+
+
+.sidebar-bottom small {
+    display: block;
+
+    margin-top: 5px;
+
+    line-height: 1.4;
+}
+
+
+/* =========================
+   MAIN
+   ========================= */
+
+.main {
+    margin-left: 255px;
+
+    width: calc(100% - 255px);
+
+    padding: 40px;
+}
+
+
+.topbar {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    margin-bottom: 30px;
+}
+
+
+.eyebrow {
+    color: #5146e5;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 7px;
+}
+
+
+h1 {
+    font-size: 34px;
+
+    margin-bottom: 8px;
+}
+
+
+.subtitle {
+    color: #667085;
+
+    font-size: 15px;
+}
+
+
+.refresh-btn {
+    border: 1px solid #dfe2ea;
+
+    background: white;
+
+    color: #344054;
+
+    border-radius: 10px;
+
+    padding: 11px 17px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.refresh-btn:hover {
+    border-color: #5146e5;
+
+    color: #5146e5;
+}
+
+
+/* =========================
+   STATS
+   ========================= */
+
+.stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 16px;
+
+    margin-bottom: 20px;
+}
+
+
+.stat-card {
+    background: white;
+
+    border: 1px solid #e7e9ef;
+
+    border-radius: 16px;
+
+    padding: 22px;
+
+    box-shadow:
+        0 8px 25px rgba(16, 24, 40, 0.04);
+}
+
+
+.stat-card span {
+    color: #667085;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+.stat-card strong {
+    display: block;
+
+    margin-top: 9px;
+
+    font-size: 31px;
+}
+
+
+/* =========================
+   PANELS
+   ========================= */
+
+.content-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+
+    margin-bottom: 20px;
+}
+
+
+.panel {
+    background: white;
+
+    border: 1px solid #e7e9ef;
+
+    border-radius: 18px;
+
+    padding: 22px;
+
+    box-shadow:
+        0 8px 25px rgba(16, 24, 40, 0.04);
+}
+
+
+.panel-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+
+.panel-label {
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    color: #98a2b3;
+
+    margin-bottom: 5px;
+}
+
+
+.panel h2 {
+    font-size: 18px;
+}
+
+
+/* =========================
+   DEPARTMENTS
+   ========================= */
+
+.department-row {
+    margin-bottom: 17px;
+}
+
+
+.department-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 7px;
+
+    font-size: 13px;
+}
+
+
+.department-top strong {
+    font-size: 13px;
+}
+
+
+.department-bar {
+    height: 7px;
+
+    border-radius: 10px;
+
+    background: #eef0f5;
+
+    overflow: hidden;
+}
+
+
+.department-fill {
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: #5146e5;
+}
+
+
+/* =========================
+   ATTENTION
+   ========================= */
+
+.attention-box {
+    min-height: 120px;
+
+    border-radius: 14px;
+
+    background: #fff8eb;
+
+    border: 1px solid #f8dfb1;
+
+    padding: 22px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+}
+
+
+.attention-box strong {
+    font-size: 36px;
+
+    color: #b54708;
+}
+
+
+.attention-box span {
+    margin-top: 5px;
+
+    color: #7a4b13;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   TABLE
+   ========================= */
+
+.complaints-panel {
+    padding-bottom: 8px;
+}
+
+
+.last-updated {
+    color: #98a2b3;
+
+    font-size: 12px;
+}
+
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 850px;
+}
+
+
+th {
+    text-align: left;
+
+    padding: 12px;
+
+    font-size: 11px;
+
+    color: #98a2b3;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.7px;
+
+    border-bottom: 1px solid #eaecf0;
+}
+
+
+td {
+    padding: 15px 12px;
+
+    border-bottom: 1px solid #f0f1f4;
+
+    font-size: 13px;
+
+    color: #475467;
+}
+
+
+td:first-child {
+    font-weight: 800;
+
+    color: #5146e5;
+}
+
+
+.issue-cell {
+    max-width: 240px;
+
+    color: #172033;
+
+    font-weight: 700;
+}
+
+
+.badge {
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+.badge-high {
+    background: #fff1f2;
+
+    color: #be123c;
+}
+
+
+.badge-critical {
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+
+.badge-medium {
+    background: #fff7ed;
+
+    color: #c2410c;
+}
+
+
+.badge-low {
+    background: #f0fdf4;
+
+    color: #15803d;
+}
+
+
+.badge-pending {
+    background: #f2f4f7;
+
+    color: #475467;
+}
+
+
+.badge-resolved {
+    background: #ecfdf3;
+
+    color: #027a48;
+}
+
+
+.loading {
+    color: #98a2b3;
+
+    font-size: 13px;
+}
+
+
+@media (max-width: 1000px) {
+
+    .sidebar {
+        width: 210px;
+    }
+
+    .main {
+        margin-left: 210px;
+
+        width: calc(100% - 210px);
+
+        padding: 25px;
+    }
+
+    .stats {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .sidebar {
+        display: none;
+    }
+
+    .main {
+        margin-left: 0;
+
+        width: 100%;
+
+        padding: 20px;
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar {
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+}
+
+.status-select {
+    border: 1px solid #dfe2ea;
+    background: white;
+
+    border-radius: 8px;
+
+    padding: 7px 10px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    color: #475467;
+
+    cursor: pointer;
+
+    outline: none;
+}
+
+.status-select:focus {
+    border-color: #5146e5;
+    box-shadow: 0 0 0 3px rgba(81, 70, 229, 0.08);
+}
+
+/* =========================
+   CAMPUS SIGNALS
+   ========================= */
+
+.signal-description {
+    color: #98a2b3;
+    font-size: 12px;
+}
+
+
+.signals-panel {
+    margin-bottom: 20px;
+}
+
+
+.signals-list {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+}
+
+
+.signal-card {
+    border: 1px solid #e7e9ef;
+
+    border-radius: 15px;
+
+    padding: 18px;
+
+    background: #fcfcfe;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.signal-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 24px rgba(16, 24, 40, 0.07);
+}
+
+
+.signal-card-top {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+
+.signal-location {
+    display: block;
+
+    color: #5146e5;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 5px;
+}
+
+
+.signal-card h3 {
+    font-size: 18px;
+
+    color: #172033;
+}
+
+
+.signal-priority {
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+.signal-critical {
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+
+.signal-high {
+    background: #fff1f2;
+
+    color: #be123c;
+}
+
+
+.signal-medium {
+    background: #fff7ed;
+
+    color: #c2410c;
+}
+
+
+.signal-low {
+    background: #ecfdf3;
+
+    color: #027a48;
+}
+
+
+.signal-meta {
+    display: grid;
+
+    grid-template-columns:
+        0.8fr 0.8fr 1.5fr;
+
+    gap: 10px;
+}
+
+
+.signal-meta > div {
+    padding: 10px;
+
+    border-radius: 10px;
+
+    background: white;
+
+    border: 1px solid #eef0f4;
+}
+
+
+.signal-meta strong {
+    display: block;
+
+    font-size: 14px;
+
+    color: #172033;
+
+    margin-bottom: 3px;
+}
+
+
+.signal-meta span {
+    display: block;
+
+    font-size: 10px;
+
+    color: #98a2b3;
+}
+
+
+.signal-footer {
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-top: 15px;
+
+    padding-top: 13px;
+
+    border-top: 1px solid #eef0f4;
+
+    color: #667085;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+.no-signals {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 20px;
+
+    border-radius: 13px;
+
+    background: #f8f9fb;
+
+    border: 1px dashed #dfe2ea;
+}
+
+
+.no-signals-icon {
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 10px;
+
+    background: #eef0f4;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-weight: 800;
+
+    color: #667085;
+}
+
+
+.no-signals strong {
+    font-size: 13px;
+}
+
+
+.no-signals p {
+    margin-top: 4px;
+
+    color: #98a2b3;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+@media (max-width: 800px) {
+
+    .signals-list {
+        grid-template-columns: 1fr;
+    }
+
+    .signal-meta {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .signal-meta > div:last-child {
+        grid-column: span 2;
+    }
+
+}
+
+/* =========================
+   AI OPERATIONS BRIEFING
+   ========================= */
+
+.briefing-panel {
+    margin-bottom: 20px;
+}
+
+
+.briefing-status {
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    background: #eef0ff;
+
+    color: #5146e5;
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+
+.briefing-headline {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 20px;
+
+    margin-bottom: 20px;
+}
+
+
+.briefing-headline h3 {
+    font-size: 20px;
+
+    margin-bottom: 8px;
+
+    color: #172033;
+}
+
+
+.briefing-headline p {
+    max-width: 850px;
+
+    color: #667085;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+.briefing-urgency {
+    padding: 6px 11px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+.briefing-urgency.critical {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+
+.briefing-urgency.high {
+    background: #fff1f2;
+    color: #be123c;
+}
+
+
+.briefing-urgency.medium {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+
+.briefing-urgency.low {
+    background: #ecfdf3;
+    color: #027a48;
+}
+
+
+.briefing-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 12px;
+}
+
+
+.briefing-item {
+    padding: 15px;
+
+    border: 1px solid #eaecf0;
+
+    border-radius: 12px;
+
+    background: #fafbfc;
+}
+
+
+.briefing-item span,
+.briefing-action span {
+    display: block;
+
+    color: #98a2b3;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 6px;
+}
+
+
+.briefing-item strong {
+    display: block;
+
+    color: #172033;
+
+    font-size: 13px;
+
+    line-height: 1.4;
+}
+
+
+.briefing-action {
+    padding: 16px;
+
+    border-radius: 12px;
+
+    background: #f8f7ff;
+
+    border: 1px solid #e5e2ff;
+}
+
+
+.briefing-action span {
+    color: #5146e5;
+}
+
+
+.briefing-action p {
+    color: #475467;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+@media (max-width: 800px) {
+
+    .briefing-headline {
+        flex-direction: column;
+    }
+
+    .briefing-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+/* =========================
+   SLA BADGES
+   ========================= */
+
+.sla-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+.sla-loading {
+    background: #f2f4f7;
+
+    color: #98a2b3;
+}
+
+
+.sla-on-track {
+    background: #ecfdf3;
+
+    color: #027a48;
+}
+
+
+.sla-risk {
+    background: #fff7ed;
+
+    color: #c2410c;
+}
+
+
+.sla-breached {
+    background: #fee2e2;
+
+    color: #b42318;
+}
+
+
+.sla-resolved {
+    background: #eef0ff;
+
+    color: #5146e5;
+}
+
+/* =========================================
+   HACKATHON UI POLISH
+   ========================================= */
+
+/* Smooth page feel */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+}
+
+
+/* =========================================
+   SIDEBAR POLISH
+   ========================================= */
+
+.sidebar {
+    box-shadow: 8px 0 30px rgba(16, 24, 40, 0.025);
+
+    z-index: 20;
+
+    backdrop-filter: blur(14px);
+}
+
+.brand-mark {
+    box-shadow:
+        0 8px 20px rgba(81, 70, 229, 0.22);
+}
+
+nav a {
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+nav a:hover {
+    transform: translateX(3px);
+}
+
+nav a.active {
+    box-shadow:
+        0 5px 15px rgba(81, 70, 229, 0.08);
+}
+
+
+/* =========================================
+   MAIN HEADER
+   ========================================= */
+
+.topbar {
+    position: relative;
+}
+
+.topbar h1 {
+    letter-spacing: -0.8px;
+}
+
+.refresh-btn {
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.refresh-btn:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 6px 18px rgba(16, 24, 40, 0.08);
+}
+
+
+/* =========================================
+   STAT CARDS
+   ========================================= */
+
+.stat-card {
+    position: relative;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.stat-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 3px;
+
+    background: linear-gradient(
+        90deg,
+        #5146e5,
+        #8178ff
+    );
+
+    opacity: 0;
+
+    transition: opacity 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+
+    border-color: #ddd9ff;
+
+    box-shadow:
+        0 14px 35px rgba(16, 24, 40, 0.08);
+}
+
+.stat-card:hover::before {
+    opacity: 1;
+}
+
+.stat-card strong {
+    letter-spacing: -1px;
+}
+
+
+/* =========================================
+   PANELS
+   ========================================= */
+
+.panel {
+    transition:
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.panel:hover {
+    border-color: #e0def5;
+
+    box-shadow:
+        0 12px 32px rgba(16, 24, 40, 0.055);
+}
+
+.panel-header h2 {
+    letter-spacing: -0.2px;
+}
+
+
+/* =========================================
+   AI BRIEFING
+   ========================================= */
+
+.briefing-panel {
+    position: relative;
+
+    overflow: hidden;
+}
+
+.briefing-panel::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 4px;
+
+    background: linear-gradient(
+        90deg,
+        #5146e5,
+        #8178ff,
+        #b7b1ff
+    );
+}
+
+.briefing-status {
+    box-shadow:
+        0 4px 12px rgba(81, 70, 229, 0.08);
+}
+
+.briefing-headline h3 {
+    letter-spacing: -0.4px;
+}
+
+.briefing-item {
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.briefing-item:hover {
+    transform: translateY(-2px);
+
+    background: #ffffff;
+
+    border-color: #ddd9ff;
+}
+
+.briefing-action {
+    position: relative;
+
+    overflow: hidden;
+}
+
+.briefing-action::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 3px;
+    height: 100%;
+
+    background: #5146e5;
+}
+
+
+/* =========================================
+   CAMPUS SIGNALS
+   ========================================= */
+
+.signals-panel {
+    position: relative;
+}
+
+.signal-card {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fafaff
+        );
+}
+
+.signal-card h3 {
+    letter-spacing: -0.3px;
+}
+
+.signal-priority,
+.briefing-urgency,
+.sla-badge,
+.badge {
+    letter-spacing: 0.1px;
+}
+
+.signal-meta > div {
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.signal-meta > div:hover {
+    background: #fafaff;
+
+    border-color: #ddd9ff;
+}
+
+
+/* =========================================
+   DEPARTMENT LOAD
+   ========================================= */
+
+.department-row {
+    padding: 10px 8px;
+
+    margin-left: -8px;
+    margin-right: -8px;
+
+    border-radius: 10px;
+
+    transition: background 0.2s ease;
+}
+
+.department-row:hover {
+    background: #fafaff;
+}
+
+.department-fill {
+    background:
+        linear-gradient(
+            90deg,
+            #5146e5,
+            #7068f5
+        );
+
+    transition: width 0.5s ease;
+}
+
+
+/* =========================================
+   ATTENTION PANEL
+   ========================================= */
+
+.attention-box {
+    position: relative;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.attention-box::after {
+    content: "";
+
+    position: absolute;
+
+    width: 110px;
+    height: 110px;
+
+    right: -35px;
+    top: -35px;
+
+    border-radius: 50%;
+
+    background: rgba(245, 158, 11, 0.08);
+}
+
+.attention-box:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(180, 83, 9, 0.08);
+}
+
+
+/* =========================================
+   COMPLAINT TABLE
+   ========================================= */
+
+.complaints-panel {
+    overflow: hidden;
+}
+
+table tbody tr {
+    transition:
+        background 0.15s ease;
+}
+
+table tbody tr:hover {
+    background: #fafaff;
+}
+
+td:first-child {
+    font-size: 12px;
+}
+
+.issue-cell {
+    line-height: 1.45;
+}
+
+.badge,
+.sla-badge {
+    border: 1px solid transparent;
+}
+
+
+/* =========================================
+   SCROLLBAR
+   ========================================= */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d6d9e3;
+
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #b9bdca;
+}
+
+
+/* =========================================
+   MOBILE POLISH
+   ========================================= */
+
+@media (max-width: 1000px) {
+
+    .main {
+        padding: 30px;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .main {
+        padding: 18px;
+    }
+
+    h1 {
+        font-size: 27px;
+    }
+
+    .stats {
+        gap: 12px;
+    }
+
+    .stat-card {
+        padding: 18px;
+    }
+
+    .stat-card strong {
+        font-size: 26px;
+    }
+
+}
+
+/* ============================================================
+   CAMPUS PULSE — PREMIUM UI POLISH
+   ============================================================ */
+
+:root {
+    --cp-primary: #5146e5;
+    --cp-primary-dark: #4338ca;
+    --cp-ink: #111827;
+    --cp-muted: #667085;
+    --cp-soft: #98a2b3;
+    --cp-border: #e8eaf0;
+    --cp-surface: rgba(255, 255, 255, 0.94);
+    --cp-shadow:
+        0 10px 35px rgba(16, 24, 40, 0.055);
+    --cp-shadow-hover:
+        0 18px 45px rgba(16, 24, 40, 0.09);
+}
+
+
+/* =========================
+   GLOBAL DEPTH
+   ========================= */
+
+body {
+    background:
+        radial-gradient(
+            circle at 8% 8%,
+            rgba(81, 70, 229, 0.10),
+            transparent 26%
+        ),
+        radial-gradient(
+            circle at 92% 5%,
+            rgba(129, 140, 248, 0.12),
+            transparent 25%
+        ),
+        linear-gradient(
+            135deg,
+            #f8f9fd 0%,
+            #f3f5fa 55%,
+            #f7f6ff 100%
+        );
+
+    color: var(--cp-ink);
+}
+
+
+/* =========================
+   SIDEBAR
+   ========================= */
+
+.sidebar {
+    background: rgba(255, 255, 255, 0.78);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border-right: 1px solid rgba(226, 228, 236, 0.85);
+
+    box-shadow:
+        8px 0 35px rgba(16, 24, 40, 0.025);
+
+    z-index: 20;
+}
+
+
+.brand-mark {
+    background:
+        linear-gradient(
+            135deg,
+            #6257f0,
+            #4338ca
+        );
+
+    box-shadow:
+        0 8px 20px rgba(81, 70, 229, 0.22);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.brand-mark:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 25px rgba(81, 70, 229, 0.28);
+}
+
+
+nav a {
+    position: relative;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+nav a:hover {
+    transform: translateX(3px);
+}
+
+
+nav a.active {
+    box-shadow:
+        inset 3px 0 0 var(--cp-primary),
+        0 5px 18px rgba(81, 70, 229, 0.07);
+}
+
+
+/* =========================
+   MAIN HEADER
+   ========================= */
+
+.main {
+    padding-top: 44px;
+}
+
+
+.topbar {
+    margin-bottom: 34px;
+}
+
+
+.eyebrow {
+    color: var(--cp-primary);
+
+    letter-spacing: 2.4px;
+
+    font-size: 10px;
+}
+
+
+h1 {
+    color: #101828;
+
+    letter-spacing: -1.1px;
+
+    font-size: 36px;
+}
+
+
+.subtitle {
+    color: #667085;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   REFRESH BUTTON
+   ========================= */
+
+.refresh-btn {
+    border: 1px solid #e1e4ec;
+
+    background: rgba(255, 255, 255, 0.92);
+
+    box-shadow:
+        0 4px 14px rgba(16, 24, 40, 0.04);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.refresh-btn:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(81, 70, 229, 0.35);
+
+    box-shadow:
+        0 8px 22px rgba(81, 70, 229, 0.10);
+}
+
+
+/* =========================
+   KPI CARDS
+   ========================= */
+
+.stats {
+    gap: 18px;
+
+    margin-bottom: 24px;
+}
+
+
+.stat-card {
+    position: relative;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(226, 228, 236, 0.9);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.98),
+            rgba(250, 250, 253, 0.96)
+        );
+
+    border-radius: 18px;
+
+    padding: 24px;
+
+    box-shadow: var(--cp-shadow);
+
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease,
+        border-color 0.22s ease;
+}
+
+
+.stat-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 80px;
+    height: 80px;
+
+    right: -35px;
+    top: -35px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(81, 70, 229, 0.09),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+
+.stat-card:hover {
+    transform: translateY(-4px);
+
+    border-color: rgba(81, 70, 229, 0.18);
+
+    box-shadow: var(--cp-shadow-hover);
+}
+
+
+.stat-card span {
+    color: #667085;
+
+    font-size: 12px;
+
+    letter-spacing: 0.1px;
+}
+
+
+.stat-card strong {
+    color: #101828;
+
+    font-size: 34px;
+
+    letter-spacing: -1px;
+}
+
+
+/* =========================
+   ALL PANELS
+   ========================= */
+
+.panel {
+    border: 1px solid rgba(226, 228, 236, 0.92);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.97),
+            rgba(252, 252, 254, 0.96)
+        );
+
+    box-shadow: var(--cp-shadow);
+
+    transition:
+        box-shadow 0.22s ease,
+        border-color 0.22s ease;
+}
+
+
+.panel:hover {
+    border-color: rgba(81, 70, 229, 0.12);
+
+    box-shadow:
+        0 14px 40px rgba(16, 24, 40, 0.065);
+}
+
+
+.panel-label {
+    color: #98a2b3;
+
+    letter-spacing: 1.8px;
+}
+
+
+.panel h2 {
+    color: #101828;
+
+    letter-spacing: -0.35px;
+}
+
+
+/* =========================
+   DEPARTMENT LOAD
+   ========================= */
+
+.department-row {
+    padding: 7px 0;
+
+    transition:
+        transform 0.2s ease;
+}
+
+
+.department-row:hover {
+    transform: translateX(3px);
+}
+
+
+.department-top {
+    color: #475467;
+}
+
+
+.department-top strong {
+    color: #172033;
+}
+
+
+.department-bar {
+    height: 8px;
+
+    background: #eef0f5;
+
+    box-shadow:
+        inset 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+
+.department-fill {
+    background:
+        linear-gradient(
+            90deg,
+            #5146e5,
+            #756df2
+        );
+
+    box-shadow:
+        0 3px 10px rgba(81, 70, 229, 0.22);
+
+    transition:
+        width 0.5s ease;
+}
+
+
+/* =========================
+   ATTENTION
+   ========================= */
+
+.attention-box {
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fffaf0,
+            #fff6e5
+        );
+
+    border: 1px solid #f3ddb5;
+
+    box-shadow:
+        0 8px 25px rgba(181, 71, 8, 0.05);
+}
+
+
+.attention-box::after {
+    content: "";
+
+    position: absolute;
+
+    width: 130px;
+    height: 130px;
+
+    right: -55px;
+    top: -55px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(245, 158, 11, 0.08);
+}
+
+
+.attention-box strong {
+    position: relative;
+
+    z-index: 1;
+
+    font-size: 42px;
+
+    letter-spacing: -1px;
+}
+
+
+.attention-box span {
+    position: relative;
+
+    z-index: 1;
+}
+
+
+/* =========================
+   CAMPUS SIGNALS
+   ========================= */
+
+.signals-panel {
+    position: relative;
+}
+
+
+.signal-card {
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fafaff
+        );
+
+    border: 1px solid #e6e8f0;
+
+    border-radius: 17px;
+
+    box-shadow:
+        0 7px 22px rgba(16, 24, 40, 0.035);
+
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease,
+        border-color 0.22s ease;
+}
+
+
+.signal-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 4px;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            180deg,
+            #5146e5,
+            #8b83f6
+        );
+
+    opacity: 0.9;
+}
+
+
+.signal-card:hover {
+    transform: translateY(-4px);
+
+    border-color: rgba(81, 70, 229, 0.20);
+
+    box-shadow:
+        0 16px 35px rgba(16, 24, 40, 0.08);
+}
+
+
+.signal-location {
+    color: var(--cp-primary);
+
+    font-size: 10px;
+
+    letter-spacing: 1.4px;
+}
+
+
+.signal-card h3 {
+    font-size: 19px;
+
+    letter-spacing: -0.25px;
+}
+
+
+.signal-meta > div {
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fafbfe
+        );
+
+    border-color: #eceef4;
+
+    transition:
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.signal-meta > div:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(81, 70, 229, 0.16);
+}
+
+
+.signal-meta strong {
+    font-size: 15px;
+
+    letter-spacing: -0.15px;
+}
+
+
+.signal-footer {
+    color: #7a8496;
+
+    border-top-color: #edf0f4;
+}
+
+
+/* =========================
+   AI BRIEFING
+   ========================= */
+
+.briefing-panel {
+    position: relative;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(81, 70, 229, 0.14);
+
+    box-shadow:
+        0 12px 38px rgba(81, 70, 229, 0.055);
+}
+
+
+.briefing-panel::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #5146e5,
+            #8b83f6,
+            #c4b5fd
+        );
+}
+
+
+.briefing-status {
+    background:
+        linear-gradient(
+            135deg,
+            #f0efff,
+            #e9e7ff
+        );
+
+    box-shadow:
+        0 4px 12px rgba(81, 70, 229, 0.08);
+}
+
+
+.briefing-headline h3 {
+    letter-spacing: -0.4px;
+}
+
+
+.briefing-item {
+    background:
+        linear-gradient(
+            145deg,
+            #fcfcff,
+            #f8f9fc
+        );
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.briefing-item:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(81, 70, 229, 0.16);
+}
+
+
+.briefing-action {
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8f7ff,
+            #f3f1ff
+        );
+
+    box-shadow:
+        inset 3px 0 0 #5146e5;
+}
+
+
+.briefing-action p {
+    color: #475467;
+}
+
+
+/* =========================
+   COMPLAINT TABLE
+   ========================= */
+
+.complaints-panel {
+    overflow: hidden;
+}
+
+
+.table-wrapper {
+    border-radius: 12px;
+}
+
+
+table {
+    border-spacing: 0;
+}
+
+
+thead {
+    background:
+        linear-gradient(
+            180deg,
+            #fafbfc,
+            #f7f8fa
+        );
+}
+
+
+th {
+    color: #7b8496;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+}
+
+
+td {
+    transition:
+        background 0.15s ease;
+}
+
+
+tbody tr {
+    transition:
+        background 0.15s ease;
+}
+
+
+tbody tr:hover td {
+    background: #fafaff;
+}
+
+
+td:first-child {
+    font-weight: 800;
+
+    color: #5146e5;
+}
+
+
+/* =========================
+   SELECTS
+   ========================= */
+
+.status-select {
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.status-select:hover {
+    border-color: rgba(81, 70, 229, 0.35);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================
+   BADGES
+   ========================= */
+
+.badge,
+.signal-priority,
+.sla-badge {
+    letter-spacing: 0.15px;
+}
+
+
+/* =========================
+   SMOOTH PAGE FEEL
+   ========================= */
+
+.panel,
+.stat-card,
+.signal-card,
+.refresh-btn,
+.department-row {
+    will-change: transform;
+}
+
+
+/* =========================
+   RESPONSIVE POLISH
+   ========================= */
+
+@media (max-width: 1000px) {
+
+    .main {
+        padding: 30px;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .main {
+        padding: 18px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .stat-card {
+        padding: 19px;
+    }
+
+    .signal-card {
+        padding: 16px;
+    }
+}
+
+/* ============================================================
+   FINAL COMPOSITION POLISH
+   ============================================================ */
+
+.signals-list {
+    grid-template-columns: 1fr;
+}
+
+
+/* Make a single signal feel intentional */
+
+.signal-card {
+    min-height: 190px;
+}
+
+
+/* Better signal information layout */
+
+.signal-meta {
+    grid-template-columns:
+        0.8fr
+        0.8fr
+        1.6fr;
+}
+
+
+/* Tighten dashboard vertical rhythm */
+
+.topbar {
+    margin-bottom: 28px;
+}
+
+.briefing-panel {
+    margin-bottom: 18px;
+}
+
+.stats {
+    margin-bottom: 18px;
+}
+
+
+/* Stronger section headers */
+
+.panel-header {
+    margin-bottom: 18px;
+}
+
+
+/* Premium card spacing */
+
+.stat-card {
+    min-height: 112px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+/* Make the main dashboard feel less stretched */
+
+.main {
+    max-width: 1700px;
+}
+
+
+/* Better signal card hierarchy */
+
+.signal-card-top {
+    margin-bottom: 16px;
+}
+
+
+/* More refined footer */
+
+.signal-footer {
+    margin-top: 14px;
+}
+
+
+/* ============================================================
+   RESPONSIVE SIGNALS
+   ============================================================ */
+
+@media (max-width: 800px) {
+
+    .signals-list {
+        grid-template-columns: 1fr;
+    }
+
+    .signal-meta {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .signal-meta > div:last-child {
+        grid-column: span 2;
+    }
+}
+
+/* ============================================================
+   AI BRIEFING — COMMAND CENTRE HERO
+   ============================================================ */
+
+.briefing-panel {
+    position: relative;
+    overflow: hidden;
+
+    padding: 26px 26px 24px;
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(81, 70, 229, 0.09),
+            transparent 32%
+        ),
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fafaff
+        );
+
+    border: 1px solid rgba(81, 70, 229, 0.14);
+
+    box-shadow:
+        0 14px 45px rgba(81, 70, 229, 0.07);
+}
+
+
+/* glowing top edge */
+
+.briefing-panel::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #5146e5,
+            #7c73f2,
+            #b8b2ff
+        );
+}
+
+
+/* subtle decorative glow */
+
+.briefing-panel::after {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    right: -90px;
+    top: -90px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(81, 70, 229, 0.055);
+
+    pointer-events: none;
+}
+
+
+/* =========================
+   BRIEFING HEADER
+   ========================= */
+
+.briefing-headline {
+    position: relative;
+
+    z-index: 1;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 30px;
+
+    margin-bottom: 22px;
+}
+
+
+.briefing-headline h3 {
+    margin-bottom: 9px;
+
+    color: #101828;
+
+    font-size: 22px;
+
+    line-height: 1.3;
+
+    letter-spacing: -0.45px;
+}
+
+
+.briefing-headline p {
+    max-width: 900px;
+
+    color: #667085;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================
+   URGENCY
+   ========================= */
+
+.briefing-urgency {
+    flex-shrink: 0;
+
+    padding: 7px 13px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.6px;
+
+    text-transform: uppercase;
+
+    box-shadow:
+        0 5px 14px rgba(16, 24, 40, 0.05);
+}
+
+
+.briefing-urgency.high {
+    background: #fff1f2;
+
+    color: #d92d20;
+
+    border: 1px solid #ffd6d9;
+}
+
+
+.briefing-urgency.critical {
+    background: #fef3f2;
+
+    color: #b42318;
+
+    border: 1px solid #fecdca;
+}
+
+
+.briefing-urgency.medium {
+    background: #fffaeb;
+
+    color: #b54708;
+
+    border: 1px solid #fedf89;
+}
+
+
+.briefing-urgency.low {
+    background: #ecfdf3;
+
+    color: #027a48;
+
+    border: 1px solid #abefc6;
+}
+
+
+/* =========================
+   INTELLIGENCE GRID
+   ========================= */
+
+.briefing-grid {
+    position: relative;
+
+    z-index: 1;
+
+    display: grid;
+
+    grid-template-columns:
+        1.25fr
+        0.75fr
+        1fr;
+
+    gap: 12px;
+
+    margin-bottom: 14px;
+}
+
+
+.briefing-item {
+    min-height: 88px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    padding: 15px 17px;
+
+    border-radius: 13px;
+
+    background:
+        rgba(255, 255, 255, 0.78);
+
+    border: 1px solid #e9eaf1;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.briefing-item:hover {
+    transform: translateY(-2px);
+
+    border-color:
+        rgba(81, 70, 229, 0.20);
+
+    box-shadow:
+        0 8px 22px rgba(16, 24, 40, 0.05);
+}
+
+
+.briefing-item span {
+    margin-bottom: 7px;
+
+    color: #98a2b3;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+
+.briefing-item strong {
+    color: #172033;
+
+    font-size: 13px;
+
+    line-height: 1.45;
+}
+
+
+/* =========================
+   RECOMMENDED ACTION
+   ========================= */
+
+.briefing-action {
+    position: relative;
+
+    z-index: 1;
+
+    padding: 17px 19px;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f7f6ff,
+            #f2f0ff
+        );
+
+    border: 1px solid #e3e0ff;
+
+    box-shadow:
+        inset 4px 0 0 #5146e5;
+}
+
+
+.briefing-action span {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #5146e5;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+
+.briefing-action p {
+    color: #344054;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   LOADING STATE
+   ========================= */
+
+.briefing-panel .loading {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    color: #98a2b3;
+}
+
+
+.briefing-panel .loading::before {
+    content: "";
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #5146e5;
+
+    box-shadow:
+        0 0 0 5px rgba(81, 70, 229, 0.10);
+
+    animation:
+        briefingPulse 1.4s ease-in-out infinite;
+}
+
+
+@keyframes briefingPulse {
+
+    0%,
+    100% {
+        opacity: 0.35;
+        transform: scale(0.85);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 900px) {
+
+    .briefing-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .briefing-headline {
+        flex-direction: column;
+    }
+
+    .briefing-urgency {
+        align-self: flex-start;
+    }
+}
+
+/* ============================================================
+   ATTENTION PANEL — ACTION CENTER
+   ============================================================ */
+
+.attention-card {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fffdf9
+        );
+
+    border: 1px solid #eee8dc;
+
+    box-shadow:
+        0 12px 35px rgba(16, 24, 40, 0.045);
+}
+
+
+/* subtle warning glow */
+
+.attention-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 170px;
+    height: 170px;
+
+    right: -70px;
+    top: -75px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(245, 158, 11, 0.08);
+
+    pointer-events: none;
+}
+
+
+/* =========================
+   ATTENTION HEADER
+   ========================= */
+
+.attention-card h2 {
+    position: relative;
+    z-index: 1;
+
+    margin-bottom: 18px;
+}
+
+
+/* =========================
+   MAIN ALERT
+   ========================= */
+
+.attention-alert {
+    position: relative;
+    z-index: 1;
+
+    padding: 22px;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fffaf0,
+            #fff7e6
+        );
+
+    border: 1px solid #f6dca7;
+
+    overflow: hidden;
+}
+
+
+.attention-alert::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 4px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f59e0b,
+            #d97706
+        );
+}
+
+
+/* =========================
+   ALERT NUMBER
+   ========================= */
+
+.attention-number {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #b54708;
+
+    font-size: 38px;
+
+    font-weight: 800;
+
+    line-height: 1;
+
+    letter-spacing: -1px;
+}
+
+
+.attention-label {
+    display: block;
+
+    color: #7a4a0b;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    line-height: 1.5;
+}
+
+
+/* =========================
+   ACTION TEXT
+   ========================= */
+
+.attention-action {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 18px;
+
+    padding-top: 16px;
+
+    border-top: 1px solid rgba(181, 71, 8, 0.13);
+}
+
+
+.attention-action span {
+    color: #8b5e18;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+.attention-action strong {
+    color: #9a3412;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   STATUS DOT
+   ========================= */
+
+.attention-status {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    background: #fff;
+
+    border: 1px solid #f2d39b;
+
+    color: #b54708;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+.attention-status::before {
+    content: "";
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #f59e0b;
+
+    box-shadow:
+        0 0 0 4px rgba(245, 158, 11, 0.12);
+}
+
+
+/* =========================
+   HOVER
+   ========================= */
+
+.attention-alert {
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.attention-alert:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(181, 71, 8, 0.08);
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 800px) {
+
+    .attention-action {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+}
+
+/* ============================================================
+   ATTENTION + DEPARTMENT LOAD — FINAL POLISH
+   ============================================================ */
+
+
+/* ============================================================
+   ATTENTION PANEL
+   ============================================================ */
+
+.attention-box {
+    position: relative;
+
+    overflow: hidden;
+
+    min-height: 170px;
+
+    padding: 24px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #fffdf9,
+            #fff8ec
+        );
+
+    border: 1px solid #f1dfbd;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 30px rgba(181, 71, 8, 0.045);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* Decorative warning glow */
+
+.attention-box::after {
+    content: "";
+
+    position: absolute;
+
+    width: 150px;
+    height: 150px;
+
+    right: -55px;
+    top: -65px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(245, 158, 11, 0.09);
+
+    pointer-events: none;
+}
+
+
+/* Number */
+
+.attention-box strong {
+    position: relative;
+
+    z-index: 1;
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #b54708;
+
+    font-size: 40px;
+
+    line-height: 1;
+
+    letter-spacing: -1px;
+}
+
+
+/* Description */
+
+.attention-box span,
+.attention-box p {
+    position: relative;
+
+    z-index: 1;
+
+    color: #7a4a0b;
+
+    font-size: 13px;
+
+    line-height: 1.55;
+}
+
+
+.attention-box:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 16px 35px rgba(181, 71, 8, 0.08);
+}
+
+
+/* ============================================================
+   DEPARTMENT LOAD
+   ============================================================ */
+
+.department-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 17px;
+}
+
+
+/* Each department becomes a mini workload row */
+
+.department-row {
+    position: relative;
+
+    padding: 4px 0 5px;
+
+    transition:
+        transform 0.2s ease;
+}
+
+
+.department-row:hover {
+    transform: translateX(4px);
+}
+
+
+/* Department name + count */
+
+.department-top {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 8px;
+}
+
+
+.department-top strong {
+    color: #172033;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+.department-top span {
+    min-width: 26px;
+
+    text-align: center;
+
+    padding: 4px 8px;
+
+    border-radius: 999px;
+
+    background: #f0efff;
+
+    color: #5146e5;
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+
+/* Track */
+
+.department-bar {
+    position: relative;
+
+    width: 100%;
+
+    height: 9px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background:
+        #eef0f5;
+
+    box-shadow:
+        inset 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+
+/* Progress */
+
+.department-fill {
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            #5146e5,
+            #756df2
+        );
+
+    box-shadow:
+        0 3px 10px rgba(81, 70, 229, 0.20);
+
+    transition:
+        width 0.6s cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        );
+}
+
+
+/* Strongest department */
+
+.department-row:first-child .department-fill {
+    background:
+        linear-gradient(
+            90deg,
+            #4338ca,
+            #6d63ee
+        );
+}
+
+
+/* ============================================================
+   DEPARTMENT PANEL SPACING
+   ============================================================ */
+
+.department-panel {
+    min-height: 340px;
+}
+
+
+.department-panel .panel-header {
+    margin-bottom: 24px;
+}
+
+
+/* ============================================================
+   RECENT COMPLAINTS
+   ============================================================ */
+
+.complaints-panel {
+    margin-top: 22px;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+}
+
+
+.complaints-panel .panel-header {
+    padding-bottom: 18px;
+}
+
+
+.table-wrapper {
+    border-radius: 12px;
+
+    overflow: hidden;
+}
+
+
+table {
+    width: 100%;
+}
+
+
+thead th {
+    padding-top: 13px;
+    padding-bottom: 13px;
+}
+
+
+tbody tr {
+    transition:
+        background 0.18s ease;
+}
+
+
+tbody tr:hover {
+    background: #fafaff;
+}
+
+
+/* Empty table state */
+
+#complaintTable td[colspan] {
+    padding: 28px;
+
+    color: #98a2b3;
+
+    text-align: center;
+}
+
+
+/* ============================================================
+   SECTION RHYTHM
+   ============================================================ */
+
+.grid-two {
+    gap: 20px;
+
+    margin-top: 20px;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 800px) {
+
+    .department-list {
+        gap: 14px;
+    }
+
+    .attention-box {
+        min-height: 150px;
+    }
+
+    .grid-two {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+/* ============================================================
+   RECENT COMPLAINTS — PREMIUM DATA TABLE
+   ============================================================ */
+
+.complaints-panel {
+    position: relative;
+
+    margin-top: 22px;
+
+    padding: 26px 22px 20px;
+
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.92);
+
+    border: 1px solid rgba(226, 228, 238, 0.9);
+
+    box-shadow:
+        0 12px 35px rgba(31, 41, 55, 0.045);
+
+    overflow: hidden;
+}
+
+
+/* subtle top accent */
+
+.complaints-panel::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #5146e5,
+            #8b83ff,
+            transparent
+        );
+}
+
+
+/* Header */
+
+.complaints-panel .panel-header {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    margin-bottom: 22px;
+}
+
+
+.complaints-panel .panel-header h2 {
+    margin: 3px 0 0;
+
+    color: #172033;
+
+    font-size: 19px;
+
+    font-weight: 750;
+
+    letter-spacing: -0.3px;
+}
+
+
+.complaints-panel .panel-header .eyebrow {
+    color: #98a2b3;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+
+/* Updated timestamp */
+
+#lastUpdated {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 4px;
+
+    color: #98a2b3;
+
+    font-size: 11px;
+}
+
+
+/* tiny live indicator */
+
+#lastUpdated::before {
+    content: "";
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow:
+        0 0 0 3px rgba(34, 197, 94, 0.10);
+}
+
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+
+.complaints-panel .table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    border-radius: 13px;
+
+    border: 1px solid #edf0f5;
+}
+
+
+.complaints-panel table {
+    width: 100%;
+
+    min-width: 950px;
+
+    border-collapse: separate;
+
+    border-spacing: 0;
+}
+
+
+/* Header row */
+
+.complaints-panel thead {
+    background:
+        linear-gradient(
+            180deg,
+            #fafbfc,
+            #f7f8fa
+        );
+}
+
+
+.complaints-panel thead th {
+    padding: 13px 12px;
+
+    border-bottom: 1px solid #e8ebf1;
+
+    color: #8b95a7;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.3px;
+
+    text-align: left;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+
+/* First header */
+
+.complaints-panel thead th:first-child {
+    padding-left: 16px;
+}
+
+
+/* Body */
+
+.complaints-panel tbody td {
+    padding: 14px 12px;
+
+    border-bottom: 1px solid #f0f2f5;
+
+    color: #344054;
+
+    font-size: 12px;
+
+    vertical-align: middle;
+}
+
+
+.complaints-panel tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* Row hover */
+
+.complaints-panel tbody tr {
+    transition:
+        background 0.18s ease,
+        transform 0.18s ease;
+}
+
+
+.complaints-panel tbody tr:hover {
+    background: #fafaff;
+}
+
+
+/* ID */
+
+.complaints-panel tbody td:first-child {
+    padding-left: 16px;
+
+    color: #5146e5;
+
+    font-weight: 800;
+}
+
+
+/* Issue */
+
+.complaints-panel .issue-cell {
+    max-width: 230px;
+
+    color: #172033;
+
+    font-weight: 650;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* ============================================================
+   STATUS / PRIORITY PILLS
+   ============================================================ */
+
+.complaints-panel .status-pill,
+.complaints-panel .priority-pill {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 62px;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.2px;
+}
+
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+
+#complaintTable td[colspan] {
+    height: 125px;
+
+    padding: 30px 20px;
+
+    color: #98a2b3;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff,
+            #fcfcfe
+        );
+}
+
+
+#complaintTable td[colspan]::before {
+    content: "—";
+
+    display: block;
+
+    width: 34px;
+    height: 34px;
+
+    margin: 0 auto 10px;
+
+    border-radius: 10px;
+
+    background: #f2f1ff;
+
+    color: #756df2;
+
+    font-size: 18px;
+
+    line-height: 34px;
+
+    text-align: center;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .complaints-panel {
+        padding: 22px 16px 16px;
+    }
+
+    .complaints-panel .panel-header {
+        gap: 15px;
+    }
+
+}

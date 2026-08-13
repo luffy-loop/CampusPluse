@@ -1,0 +1,841 @@
+/* =========================================
+   CAMPUS PULSE — STUDENT PORTAL
+   Premium UI
+   ========================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --primary: #5146e5;
+    --primary-dark: #4038b8;
+    --text: #14213d;
+    --muted: #667085;
+    --border: #e3e7ef;
+    --background: #f5f7fc;
+    --card: #ffffff;
+    --success: #16803c;
+    --success-bg: #ecfdf3;
+    --danger: #b42318;
+    --danger-bg: #fff1f0;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    color: var(--text);
+
+    background:
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(81, 70, 229, 0.12),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 85%,
+            rgba(124, 58, 237, 0.09),
+            transparent 30%
+        ),
+        var(--background);
+
+    padding: 48px 20px;
+}
+
+
+/* =========================================
+   MAIN CONTAINER
+   ========================================= */
+
+.container {
+    width: min(760px, 100%);
+
+    margin: 0 auto;
+
+    background: rgba(255, 255, 255, 0.96);
+
+    border: 1px solid rgba(255, 255, 255, 0.8);
+
+    border-radius: 28px;
+
+    padding: 48px;
+
+    box-shadow:
+        0 24px 70px rgba(31, 41, 55, 0.10),
+        0 4px 16px rgba(31, 41, 55, 0.04);
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.header {
+    margin-bottom: 38px;
+}
+
+.eyebrow {
+    color: var(--primary);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 2.5px;
+
+    margin-bottom: 10px;
+}
+
+.header h1 {
+    font-size: clamp(32px, 5vw, 46px);
+
+    line-height: 1.08;
+
+    letter-spacing: -1.5px;
+
+    margin-bottom: 12px;
+}
+
+.subtitle {
+    color: var(--muted);
+
+    font-size: 16px;
+
+    line-height: 1.6;
+
+    max-width: 600px;
+}
+
+
+/* =========================================
+   FORM
+   ========================================= */
+
+#complaintForm {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 24px;
+}
+
+.field {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+.field label {
+    color: var(--text);
+
+    font-size: 14px;
+
+    font-weight: 750;
+}
+
+
+/* =========================================
+   INPUTS
+   ========================================= */
+
+input[type="text"],
+textarea {
+    width: 100%;
+
+    border: 1px solid var(--border);
+
+    background: #fbfcfe;
+
+    color: var(--text);
+
+    border-radius: 14px;
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+input[type="text"] {
+    height: 54px;
+
+    padding: 0 16px;
+}
+
+textarea {
+    min-height: 170px;
+
+    padding: 16px;
+
+    resize: vertical;
+
+    line-height: 1.6;
+}
+
+input[type="text"]::placeholder,
+textarea::placeholder {
+    color: #98a2b3;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+    background: #ffffff;
+
+    border-color: rgba(81, 70, 229, 0.65);
+
+    box-shadow:
+        0 0 0 4px rgba(81, 70, 229, 0.10);
+}
+
+
+/* =========================================
+   ANONYMOUS BOX
+   ========================================= */
+
+.anonymous-box {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 18px 20px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    background: #f8f9fc;
+}
+
+.anonymous-box strong {
+    display: block;
+
+    font-size: 15px;
+
+    margin-bottom: 5px;
+}
+
+.anonymous-box p {
+    color: var(--muted);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   TOGGLE
+   ========================================= */
+
+.switch {
+    position: relative;
+
+    width: 52px;
+
+    height: 30px;
+
+    flex-shrink: 0;
+
+    cursor: pointer;
+}
+
+.switch input {
+    opacity: 0;
+
+    width: 0;
+
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+
+    inset: 0;
+
+    border-radius: 30px;
+
+    background: #d0d5dd;
+
+    transition: 0.25s;
+}
+
+.slider::before {
+    content: "";
+
+    position: absolute;
+
+    width: 24px;
+
+    height: 24px;
+
+    left: 3px;
+
+    top: 3px;
+
+    background: white;
+
+    border-radius: 50%;
+
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+
+    transition: 0.25s;
+}
+
+.switch input:checked + .slider {
+    background: var(--primary);
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(22px);
+}
+
+
+/* =========================================
+   EVIDENCE UPLOAD
+   ========================================= */
+
+.optional {
+    color: #98a2b3;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    margin-left: 5px;
+}
+
+input[type="file"] {
+    width: 100%;
+
+    padding: 14px;
+
+    border: 1.5px dashed #cdd3df;
+
+    border-radius: 14px;
+
+    background: #fafbfe;
+
+    color: var(--muted);
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+input[type="file"]:hover {
+    border-color: var(--primary);
+
+    background: #f8f7ff;
+}
+
+input[type="file"]::file-selector-button {
+    border: none;
+
+    border-radius: 9px;
+
+    padding: 9px 14px;
+
+    margin-right: 10px;
+
+    background: #eeecff;
+
+    color: var(--primary);
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.file-help {
+    color: var(--muted);
+
+    font-size: 12px;
+
+    margin-top: -2px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   SUBMIT BUTTON
+   ========================================= */
+
+#submitBtn {
+    width: 100%;
+
+    min-height: 56px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: linear-gradient(
+        135deg,
+        #5b50e8,
+        #493ed0
+    );
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 24px rgba(81, 70, 229, 0.22);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+#submitBtn:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 14px 30px rgba(81, 70, 229, 0.28);
+}
+
+#submitBtn:active {
+    transform: translateY(0);
+}
+
+#submitBtn:disabled {
+    opacity: 0.65;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+/* =========================================
+   RESULT
+   ========================================= */
+
+#result {
+    display: none;
+
+    margin-top: 28px;
+
+    border-radius: 18px;
+
+    padding: 24px;
+}
+
+
+/* =========================================
+   LOADING
+   ========================================= */
+
+#result.loading {
+    display: block;
+
+    background: #f5f3ff;
+
+    border: 1px solid #ddd8ff;
+
+    color: #5146e5;
+
+    line-height: 1.6;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   ERROR
+   ========================================= */
+
+#result.error {
+    display: block;
+
+    background: var(--danger-bg);
+
+    border: 1px solid #fecaca;
+
+    color: var(--danger);
+
+    line-height: 1.6;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   SUCCESS RESULT
+   ========================================= */
+
+#result.success {
+    display: block;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f0fdf4,
+            #ffffff
+        );
+
+    border: 1px solid #b7efc9;
+
+    color: var(--text);
+
+    animation: resultIn 0.35s ease;
+}
+
+@keyframes resultIn {
+
+    from {
+        opacity: 0;
+
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+}
+
+.success-header {
+    color: var(--success);
+
+    font-size: 22px;
+
+    font-weight: 850;
+
+    margin-bottom: 8px;
+}
+
+.complaint-id {
+    color: #52705d;
+
+    font-size: 13px;
+
+    font-weight: 650;
+
+    margin-bottom: 28px;
+}
+
+.ai-title {
+    color: var(--text);
+
+    font-size: 18px;
+
+    font-weight: 850;
+
+    margin-bottom: 16px;
+}
+
+
+/* =========================================
+   AI ANALYSIS GRID
+   ========================================= */
+
+.analysis-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 12px;
+}
+
+.analysis-item {
+    min-height: 88px;
+
+    padding: 16px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.analysis-item span {
+    display: block;
+
+    color: #667085;
+
+    font-size: 11px;
+
+    font-weight: 750;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.6px;
+
+    margin-bottom: 7px;
+}
+
+.analysis-item strong {
+    display: block;
+
+    color: var(--text);
+
+    font-size: 14px;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================
+   RECOMMENDATION
+   ========================================= */
+
+.recommendation {
+    margin-top: 12px;
+
+    padding: 18px;
+
+    border-radius: 14px;
+
+    background: white;
+
+    border: 1px solid #e5e7eb;
+}
+
+.recommendation span {
+    display: block;
+
+    color: #667085;
+
+    font-size: 11px;
+
+    font-weight: 750;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.6px;
+
+    margin-bottom: 8px;
+}
+
+.recommendation p {
+    color: var(--text);
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 700px) {
+
+    body {
+        padding: 18px 12px;
+    }
+
+    .container {
+        padding: 28px 20px;
+
+        border-radius: 22px;
+    }
+
+    .header h1 {
+        font-size: 32px;
+    }
+
+    .analysis-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .anonymous-box {
+        padding: 16px;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .container {
+        padding: 24px 16px;
+    }
+
+    .header {
+        margin-bottom: 28px;
+    }
+
+    .header h1 {
+        font-size: 28px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+    }
+
+    textarea {
+        min-height: 145px;
+    }
+
+}
+
+/* =========================================
+   PREMIUM EVIDENCE UPLOAD
+   ========================================= */
+
+.evidence-field {
+    gap: 10px;
+}
+
+.evidence-upload {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    width: 100%;
+
+    min-height: 88px;
+
+    padding: 18px 20px;
+
+    border: 1.5px dashed #cdd3df;
+
+    border-radius: 16px;
+
+    background: #fafbfe;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.evidence-upload:hover {
+    border-color: var(--primary);
+
+    background: #f8f7ff;
+
+    transform: translateY(-1px);
+}
+
+.evidence-upload input[type="file"] {
+    position: absolute;
+
+    width: 1px;
+
+    height: 1px;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+.upload-icon {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 46px;
+
+    height: 46px;
+
+    flex-shrink: 0;
+
+    border-radius: 13px;
+
+    background: #eeecff;
+
+    color: var(--primary);
+
+    font-size: 28px;
+
+    font-weight: 400;
+
+    line-height: 1;
+}
+
+.upload-content {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    min-width: 0;
+}
+
+.upload-content strong {
+    color: var(--text);
+
+    font-size: 14px;
+
+    font-weight: 750;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+.upload-content span {
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+
+/* Selected file state */
+
+.evidence-upload:has(input[type="file"]:valid) {
+    border-color: #b7efc9;
+
+    background: #f4fff7;
+}
+
+.evidence-upload:has(input[type="file"]:valid) .upload-icon {
+    background: #dcfce7;
+
+    color: var(--success);
+}

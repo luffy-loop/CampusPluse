@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Campus Pulse | Student Complaint Centre
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+    <main class="container">
+
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <p class="eyebrow">
+                CAMPUS PULSE
+            </p>
+
+            <h1>
+                Student Complaint Centre
+            </h1>
+
+            <p class="subtitle">
+                Tell us what happened. We'll help route your complaint to the right place.
+            </p>
+
+        </div>
+
+
+
+        <!-- COMPLAINT FORM -->
+
+        <form id="complaintForm">
+
+
+            <!-- ROLL NUMBER -->
+
+            <div class="field">
+
+                <label for="rollNo">
+                    University Roll Number
+                </label>
+
+                <input
+                    type="text"
+                    id="rollNo"
+                    placeholder="Example: 2510040024"
+                    required
+                >
+
+            </div>
+
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="field">
+
+                <label for="description">
+                    What happened?
+                </label>
+
+                <textarea
+                    id="description"
+                    placeholder="Describe your issue in your own words..."
+                    required
+                ></textarea>
+
+            </div>
+
+
+
+            <!-- ANONYMOUS OPTION -->
+
+            <div class="anonymous-box">
+
+                <div>
+
+                    <strong>
+                        Submit anonymously
+                    </strong>
+
+                    <p>
+                        Your identity will not be displayed to the department.
+                    </p>
+
+                </div>
+
+
+                <label class="switch">
+
+                    <input
+                        type="checkbox"
+                        id="anonymous"
+                    >
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+
+
+            <!-- EVIDENCE UPLOAD -->
+
+            <div class="field evidence-field">
+
+    <label>
+        Attach Evidence
+        <span class="optional">Optional</span>
+    </label>
+
+    <label for="evidence" class="evidence-upload">
+
+        <div class="upload-icon">
+            +
+        </div>
+
+        <div class="upload-content">
+            <strong id="fileName">
+                Attach a file
+            </strong>
+
+            <span id="fileHelp">
+                Photo, screenshot or PDF
+            </span>
+        </div>
+
+        <input
+            type="file"
+            id="evidence"
+            name="evidence"
+            accept=".png,.jpg,.jpeg,.webp,.pdf"
+        >
+
+    </label>
+
+</div>
+
+
+            <!-- SUBMIT -->
+
+            <button
+                type="submit"
+                id="submitBtn"
+            >
+                Submit Complaint
+            </button>
+
+
+        </form>
+
+
+
+        <!-- RESULT -->
+
+        <div id="result"></div>
+
+
+    </main>
+
+
+
+    <script
+        src="{{ url_for('static', filename='script.js') }}"
+    ></script>
+
+
+</body>
+
+</html>

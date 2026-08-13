@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Campus Pulse | Admin Command Centre</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='admin.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+    <div class="dashboard">
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <div class="brand">
+
+                <div class="brand-mark">
+                    CP
+                </div>
+
+                <div>
+
+                    <h2>Campus Pulse</h2>
+
+                    <span>Admin Command Centre</span>
+
+                </div>
+
+            </div>
+
+
+            <nav>
+
+                <a class="active" href="/admin">
+                    Dashboard
+                </a>
+
+                <a href="/">
+                    Student Portal
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-bottom">
+
+                <span>Deploython 2.0</span>
+
+                <small>
+                    Complaint Intelligence System
+                </small>
+
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN -->
+
+        <main class="main">
+
+            <header class="topbar">
+
+                <div>
+
+                    <p class="eyebrow">
+                        ADMINISTRATION
+                    </p>
+
+                    <h1>
+                        Command Centre
+                    </h1>
+
+                    <p class="subtitle">
+                        Monitor what is happening across campus.
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="refreshBtn"
+                    class="refresh-btn"
+                >
+                    Refresh Data
+                </button>
+
+            </header>
+            <!-- AI OPERATIONS BRIEFING -->
+
+<section class="panel briefing-panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <p class="panel-label">
+                AI OPERATIONS
+            </p>
+
+            <h2>
+                Campus Briefing
+            </h2>
+
+        </div>
+
+        <span class="briefing-status">
+            AI generated
+        </span>
+
+    </div>
+
+
+    <div id="briefingContent">
+
+        <p class="loading">
+            Analyzing recent campus activity...
+        </p>
+
+    </div>
+
+</section>
+
+
+            <!-- STATS -->
+
+            <section class="stats">
+
+                <div class="stat-card">
+
+                    <span>Total Complaints</span>
+
+                    <strong id="totalComplaints">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span>Pending</span>
+
+                    <strong id="pendingComplaints">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span>High Priority</span>
+
+                    <strong id="highPriority">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span>Resolved</span>
+
+                    <strong id="resolvedComplaints">
+                        —
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+            <!-- CONTENT GRID -->
+            <!-- CAMPUS SIGNALS -->
+
+<section class="panel signals-panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <p class="panel-label">
+                AI + PATTERN DETECTION
+            </p>
+
+            <h2>
+                Campus Signals
+            </h2>
+
+        </div>
+
+        <span class="signal-description">
+            Recurring issues detected across campus
+        </span>
+
+    </div>
+
+
+    <div
+        id="signalsList"
+        class="signals-list"
+    >
+
+        <p class="loading">
+            Analyzing campus patterns...
+        </p>
+
+    </div>
+
+</section>
+
+            <section class="content-grid">
+
+
+                <!-- DEPARTMENT PANEL -->
+
+                <div class="panel department-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <p class="panel-label">
+                                ROUTING
+                            </p>
+
+                            <h2>
+                                Department Load
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="departmentList">
+
+                        <p class="loading">
+                            Loading...
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PRIORITY PANEL -->
+
+                <div class="panel priority-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <p class="panel-label">
+                                ATTENTION
+                            </p>
+
+                            <h2>
+                                What needs attention?
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="attention-box">
+
+                        <strong id="attentionCount">
+                            —
+                        </strong>
+
+                        <span>
+                            high-priority complaints
+                            currently require attention
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- COMPLAINTS -->
+
+            <section class="panel complaints-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <p class="panel-label">
+                            LIVE DATA
+                        </p>
+
+                        <h2>
+                            Recent Complaints
+                        </h2>
+
+                    </div>
+
+                    <span
+                        id="lastUpdated"
+                        class="last-updated"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+
+                                <th>Issue</th>
+
+                                <th>Location</th>
+
+                                <th>Department</th>
+
+                                <th>Severity</th>
+
+                                <th>Priority</th>
+
+                                <th>Status</th>
+
+                                <th>Submitted</th>
+                                <th>Evidence</th>
+                                <th>SLA</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="complaintTable">
+
+                            <tr>
+
+                                <td colspan="8">
+                                    Loading complaints...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script
+       <script src="{{ url_for('static', filename='admin.js') }}?v=2"></script>
+    ></script>
+
+</body>
+
+</html>
