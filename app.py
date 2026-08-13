@@ -12,6 +12,16 @@ load_dotenv()
 
 app = Flask(__name__)
 
+# ============================================================
+# DATABASE CONFIGURATION
+# ============================================================
+
+DISABLE_DB = os.getenv("DISABLE_DB", "false").lower() == "true"
+
+# In-memory storage for mock data when DB is disabled
+mock_complaints = {}
+mock_complaint_counter = 1
+
 UPLOAD_FOLDER = Path(app.root_path) / "uploads"
 
 UPLOAD_FOLDER.mkdir(
@@ -51,7 +61,9 @@ client = genai.Client(
 # ============================================================
 
 def get_db_connection():
-
+    if DISABLE_DB:
+        raise Exception("Database is disabled for testing/deployment.")
+    
     return psycopg2.connect(
         host=os.getenv("DB_HOST"),
         port=os.getenv("DB_PORT"),
@@ -385,6 +397,7 @@ def create_complaint():
     conn = None
     cursor = None
     saved_file = None
+    global mock_complaint_counter
 
     try:
 
@@ -492,17 +505,58 @@ def create_complaint():
         ]
 
 
-        # -----------------------------
+        # =============================
+        # MOCK MODE (DB DISABLED)
+        # =============================
+        
+        if DISABLE_DB:
+            complaint_id = mock_complaint_counter
+            mock_complaint_counter += 1
+            
+            mock_complaints[complaint_id] = {
+                "id": complaint_id,
+                "uni_roll_no": uni_roll_no,
+                "description": description,
+                "category": category,
+                "department": department,
+                "location": location,
+                "severity": severity,
+                "priority": priority,
+                "issue_group": issue,
+                "recommended_action": recommended_action,
+                "is_anonymous": is_anonymous,
+                "evidence_path": evidence_path,
+                "status": "Pending",
+                "created_at": datetime.now(),
+                "updated_at": datetime.now()
+            }
+            
+            return jsonify({
+                "success": True,
+                "id": complaint_id,
+                "message": (
+                    "Complaint analyzed and "
+                    "submitted successfully (Mock Mode)."
+                ),
+                "analysis": analysis,
+                "evidence_uploaded": (
+                    evidence_path is not None
+                ),
+                "mode": "mock"
+            })
+
+
+        # =============================
+        # DATABASE MODE
+        # =============================
+
         # Connect to PostgreSQL
-        # -----------------------------
 
         conn = get_db_connection()
         cursor = conn.cursor()
 
 
-        # -----------------------------
         # Insert everything
-        # -----------------------------
 
         query = """
 
@@ -572,9 +626,7 @@ def create_complaint():
         conn.commit()
 
 
-        # -----------------------------
         # Response
-        # -----------------------------
 
         return jsonify({
 
@@ -648,12 +700,68 @@ def admin_dashboard():
 
     try:
 
+        # =============================
+        # MOCK MODE (DB DISABLED)
+        # =============================
+        
+        if DISABLE_DB:
+            complaints = list(mock_complaints.values())
+            
+            total = len(complaints)
+            pending = sum(1 for c in complaints if c.get("status") == "Pending")
+            high_priority = sum(1 for c in complaints if c.get("priority") in ("High", "Critical"))
+            resolved = sum(1 for c in complaints if c.get("status") == "Resolved")
+            
+            # Department distribution
+            dept_count = {}
+            for c in complaints:
+                dept = c.get("department", "Unassigned")
+                dept_count[dept] = dept_count.get(dept, 0) + 1
+            
+            departments = [
+                {"department": dept, "count": count}
+                for dept, count in sorted(dept_count.items(), key=lambda x: x[1], reverse=True)
+            ]
+            
+            # Format complaints
+            formatted_complaints = []
+            for c in complaints:
+                formatted_complaints.append({
+                    "id": c["id"],
+                    "uni_roll_no": c["uni_roll_no"],
+                    "description": c["description"],
+                    "category": c["category"],
+                    "department": c["department"],
+                    "location": c["location"],
+                    "severity": c["severity"],
+                    "priority": c["priority"],
+                    "status": c["status"],
+                    "created_at": c["created_at"].strftime("%d %b %Y, %I:%M %p") if c["created_at"] else None,
+                    "evidence_path": c["evidence_path"]
+                })
+            
+            return jsonify({
+                "success": True,
+                "stats": {
+                    "total": total,
+                    "pending": pending,
+                    "high_priority": high_priority,
+                    "resolved": resolved
+                },
+                "departments": departments,
+                "complaints": formatted_complaints,
+                "mode": "mock"
+            })
+
+
+        # =============================
+        # DATABASE MODE
+        # =============================
+
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # ----------------------------------------
         # Total complaints
-        # ----------------------------------------
 
         cursor.execute("""
             SELECT COUNT(*)
@@ -663,9 +771,7 @@ def admin_dashboard():
         total = cursor.fetchone()[0]
 
 
-        # ----------------------------------------
         # Pending complaints
-        # ----------------------------------------
 
         cursor.execute("""
             SELECT COUNT(*)
@@ -676,9 +782,7 @@ def admin_dashboard():
         pending = cursor.fetchone()[0]
 
 
-        # ----------------------------------------
         # High / Critical complaints
-        # ----------------------------------------
 
         cursor.execute("""
             SELECT COUNT(*)
@@ -689,9 +793,7 @@ def admin_dashboard():
         high_priority = cursor.fetchone()[0]
 
 
-        # ----------------------------------------
         # Resolved complaints
-        # ----------------------------------------
 
         cursor.execute("""
             SELECT COUNT(*)
@@ -702,9 +804,7 @@ def admin_dashboard():
         resolved = cursor.fetchone()[0]
 
 
-        # ----------------------------------------
         # Department distribution
-        # ----------------------------------------
 
         cursor.execute("""
             SELECT
@@ -727,9 +827,7 @@ def admin_dashboard():
         ]
 
 
-                # ----------------------------------------
-        # Recent complaints
-        # ----------------------------------------
+                # Recent complaints
 
         cursor.execute("""
             SELECT
@@ -853,6 +951,33 @@ def update_complaint_status(complaint_id):
                 "error": "Invalid status."
             }), 400
 
+        # =============================
+        # MOCK MODE (DB DISABLED)
+        # =============================
+        
+        if DISABLE_DB:
+            if complaint_id not in mock_complaints:
+                return jsonify({
+                    "success": False,
+                    "error": "Complaint not found."
+                }), 404
+            
+            mock_complaints[complaint_id]["status"] = new_status
+            mock_complaints[complaint_id]["updated_at"] = datetime.now()
+            
+            return jsonify({
+                "success": True,
+                "id": complaint_id,
+                "status": new_status,
+                "message": "Complaint status updated successfully.",
+                "mode": "mock"
+            })
+
+
+        # =============================
+        # DATABASE MODE
+        # =============================
+
         conn = get_db_connection()
         cursor = conn.cursor()
 
@@ -930,6 +1055,45 @@ def get_student_complaints():
                 "error": "University roll number is required."
             }), 400
 
+
+        # =============================
+        # MOCK MODE (DB DISABLED)
+        # =============================
+        
+        if DISABLE_DB:
+            complaints = [
+                c for c in mock_complaints.values()
+                if c["uni_roll_no"] == uni_roll_no
+            ]
+            
+            formatted_complaints = []
+            for c in complaints:
+                formatted_complaints.append({
+                    "id": c["id"],
+                    "description": c["description"],
+                    "category": c["category"],
+                    "department": c["department"],
+                    "location": c["location"],
+                    "severity": c["severity"],
+                    "priority": c["priority"],
+                    "issue": c["issue_group"],
+                    "recommended_action": c["recommended_action"],
+                    "status": c["status"],
+                    "created_at": c["created_at"].strftime("%d %b %Y, %I:%M %p") if c["created_at"] else None,
+                    "updated_at": c["updated_at"].strftime("%d %b %Y, %I:%M %p") if c["updated_at"] else None
+                })
+            
+            return jsonify({
+                "success": True,
+                "complaints": formatted_complaints,
+                "count": len(formatted_complaints),
+                "mode": "mock"
+            })
+
+
+        # =============================
+        # DATABASE MODE
+        # =============================
 
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -1044,6 +1208,42 @@ def get_complaint(complaint_id):
 
     try:
 
+        # =============================
+        # MOCK MODE (DB DISABLED)
+        # =============================
+        
+        if DISABLE_DB:
+            if complaint_id not in mock_complaints:
+                return jsonify({
+                    "success": False,
+                    "error": "Complaint not found."
+                }), 404
+            
+            c = mock_complaints[complaint_id]
+            complaint = {
+                "id": c["id"],
+                "category": c["category"],
+                "department": c["department"],
+                "location": c["location"],
+                "severity": c["severity"],
+                "priority": c["priority"],
+                "issue": c["issue_group"],
+                "recommended_action": c["recommended_action"],
+                "status": c["status"],
+                "created_at": c["created_at"].strftime("%d %b %Y, %I:%M %p") if c["created_at"] else None
+            }
+            
+            return jsonify({
+                "success": True,
+                "complaint": complaint,
+                "mode": "mock"
+            })
+
+
+        # =============================
+        # DATABASE MODE
+        # =============================
+
         conn = get_db_connection()
         cursor = conn.cursor()
 
@@ -1120,6 +1320,22 @@ def campus_signals():
     cursor = None
 
     try:
+
+        # =============================
+        # MOCK MODE (DB DISABLED)
+        # =============================
+        
+        if DISABLE_DB:
+            return jsonify({
+                "success": True,
+                "signals": [],
+                "mode": "mock"
+            })
+
+
+        # =============================
+        # DATABASE MODE
+        # =============================
 
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -1212,6 +1428,30 @@ def admin_briefing():
     cursor = None
 
     try:
+
+        # =============================
+        # MOCK MODE (DB DISABLED)
+        # =============================
+        
+        if DISABLE_DB:
+            return jsonify({
+                "success": True,
+                "briefing": {
+                    "headline": "No complaints yet",
+                    "summary": "No complaints have been submitted in mock mode.",
+                    "top_issue": "N/A",
+                    "affected_location": "N/A",
+                    "affected_department": "N/A",
+                    "recommended_action": "Monitor for incoming complaints.",
+                    "urgency": "Low"
+                },
+                "mode": "mock"
+            })
+
+
+        # =============================
+        # DATABASE MODE
+        # =============================
 
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -1406,6 +1646,70 @@ def complaint_sla(complaint_id):
 
     try:
 
+        # =============================
+        # MOCK MODE (DB DISABLED)
+        # =============================
+        
+        if DISABLE_DB:
+            if complaint_id not in mock_complaints:
+                return jsonify({
+                    "success": False,
+                    "error": "Complaint not found."
+                }), 404
+            
+            c = mock_complaints[complaint_id]
+            priority = c.get("priority", "Medium")
+            status = c.get("status", "Pending")
+            created_at = c.get("created_at", datetime.now())
+            updated_at = c.get("updated_at", datetime.now())
+            
+            sla_hours = {
+                "Critical": 2,
+                "High": 4,
+                "Medium": 12,
+                "Low": 24
+            }
+            
+            target_hours = sla_hours.get(priority, 12)
+            
+            if status == "Resolved":
+                end_time = updated_at
+            else:
+                end_time = datetime.now()
+            
+            elapsed_seconds = (end_time - created_at).total_seconds()
+            elapsed_hours = elapsed_seconds / 3600
+            remaining_hours = target_hours - elapsed_hours
+            
+            if status == "Resolved":
+                sla_status = "Resolved"
+            elif remaining_hours <= 0:
+                sla_status = "Breached"
+            elif remaining_hours <= (target_hours * 0.25):
+                sla_status = "At Risk"
+            else:
+                sla_status = "On Track"
+            
+            progress = min(100, max(0, (elapsed_hours / target_hours) * 100))
+            
+            return jsonify({
+                "success": True,
+                "complaint_id": complaint_id,
+                "priority": priority,
+                "status": status,
+                "target_hours": target_hours,
+                "elapsed_hours": round(elapsed_hours, 1),
+                "remaining_hours": round(max(0, remaining_hours), 1),
+                "progress": round(progress, 1),
+                "sla_status": sla_status,
+                "mode": "mock"
+            })
+
+
+        # =============================
+        # DATABASE MODE
+        # =============================
+
         conn = get_db_connection()
         cursor = conn.cursor()
 
@@ -1435,9 +1739,7 @@ def complaint_sla(complaint_id):
         created_at = row[3]
 
 
-        # --------------------------------
         # SLA TARGET
-        # --------------------------------
 
         sla_hours = {
 
@@ -1458,9 +1760,7 @@ def complaint_sla(complaint_id):
         )
 
 
-        # --------------------------------
         # RESOLVED COMPLAINT
-        # --------------------------------
 
         if status == "Resolved":
 
@@ -1471,9 +1771,7 @@ def complaint_sla(complaint_id):
             end_time = datetime.now()
 
 
-        # --------------------------------
         # ELAPSED TIME
-        # --------------------------------
 
         elapsed_seconds = (
             end_time - created_at
@@ -1489,9 +1787,7 @@ def complaint_sla(complaint_id):
         )
 
 
-        # --------------------------------
         # SLA STATUS
-        # --------------------------------
 
         if status == "Resolved":
 
