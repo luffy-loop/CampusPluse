@@ -24,10 +24,15 @@ mock_complaint_counter = 1
 
 UPLOAD_FOLDER = Path(app.root_path) / "uploads"
 
-UPLOAD_FOLDER.mkdir(
-    parents=True,
-    exist_ok=True
-)
+import os
+from pathlib import Path
+
+if os.getenv("VERCEL"):
+    UPLOAD_FOLDER = Path("/tmp/uploads")
+else:
+    UPLOAD_FOLDER = Path(__file__).resolve().parent / "uploads"
+
+UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 
 app.config["UPLOAD_FOLDER"] = str(UPLOAD_FOLDER)
 
