@@ -870,9 +870,6 @@ def admin_dashboard():
 @app.route("/api/admin/complaints/<int:complaint_id>/status", methods=["PUT"])
 def update_complaint_status(complaint_id):
 
-    conn = None
-    cursor = None
-
     try:
         data = request.get_json()
         new_status = data.get("status")
@@ -916,52 +913,35 @@ def update_complaint_status(complaint_id):
         # DATABASE MODE
         # =============================
 
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        result = get_complaints().update_one(
+            {"id": complaint_id},
+            {
+                "$set": {
+                    "status": new_status,
+                    "updated_at": datetime.now()
+                }
+            }
+        )
 
-        cursor.execute("""
-            UPDATE complaints
-            SET status = %s
-            WHERE id = %s
-            RETURNING id, status;
-        """, (new_status, complaint_id))
-
-        result = cursor.fetchone()
-
-        if not result:
-            conn.rollback()
-
+        if result.matched_count == 0:
             return jsonify({
                 "success": False,
                 "error": "Complaint not found."
             }), 404
 
-        conn.commit()
-
         return jsonify({
             "success": True,
-            "id": result[0],
-            "status": result[1],
+            "id": complaint_id,
+            "status": new_status,
             "message": "Complaint status updated successfully."
         })
 
     except Exception as e:
 
-        if conn:
-            conn.rollback()
-
         return jsonify({
             "success": False,
             "error": str(e)
         }), 500
-
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if conn:
-            conn.close()
 
         # ============================================================
 # STUDENT COMPLAINT TRACKING
