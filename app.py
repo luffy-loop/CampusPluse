@@ -1440,9 +1440,6 @@ Return ONLY valid JSON in this format:
 @app.route("/api/admin/complaints/<int:complaint_id>/sla")
 def complaint_sla(complaint_id):
 
-    conn = None
-    cursor = None
-
     try:
 
         # =============================
@@ -1509,21 +1506,17 @@ def complaint_sla(complaint_id):
         # DATABASE MODE
         # =============================
 
-        conn = get_db_connection()
-        cursor = conn.cursor()
-
-        cursor.execute("""
-            SELECT
-                id,
-                priority,
-                status,
-                created_at,
-                updated_at
-            FROM complaints
-            WHERE id = %s;
-        """, (complaint_id,))
-
-        row = cursor.fetchone()
+        row = get_complaints().find_one(
+            {"id": complaint_id},
+            {
+                "_id": 0,
+                "id": 1,
+                "priority": 1,
+                "status": 1,
+                "created_at": 1,
+                "updated_at": 1
+            }
+        )
 
         if not row:
 
@@ -1533,9 +1526,9 @@ def complaint_sla(complaint_id):
             }), 404
 
 
-        priority = row[1] or "Medium"
-        status = row[2] or "Pending"
-        created_at = row[3]
+        priority = row.get("priority") or "Medium"
+        status = row.get("status") or "Pending"
+        created_at = row.get("created_at")
 
 
         # SLA TARGET
@@ -1563,7 +1556,7 @@ def complaint_sla(complaint_id):
 
         if status == "Resolved":
 
-            end_time = row[4] or datetime.now()
+            end_time = row.get("updated_at") or datetime.now()
 
         else:
 
@@ -1658,14 +1651,6 @@ def complaint_sla(complaint_id):
 
         }), 500
 
-
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if conn:
-            conn.close()
 
                            
 # ============================================================
