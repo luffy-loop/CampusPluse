@@ -39,7 +39,7 @@ async function loadDashboard() {
    try {
 
     const response =
-        await fetch("https://campuspluse-z1ih.onrender.com/api/admin/dashboard");
+        await fetch("/api/admin/dashboard");
 
     const data =
         await response.json();
@@ -579,9 +579,9 @@ async function updateComplaintStatus(complaintId, newStatus) {
 
     try {
 
-       const response = await fetch(
-    `https://campuspluse-z1ih.onrender.com/api/admin/complaints/${complaintId}/status`,
-    {
+    const response = await fetch(
+        `/api/admin/complaints/${complaintId}/status`,
+        {
         method: "PUT",
 
         headers: {
