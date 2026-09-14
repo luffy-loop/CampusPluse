@@ -410,7 +410,7 @@ def create_complaint():
         # Get form data
         # -----------------------------
 
-        uni_roll_no = request.form.get("uni_roll_no")
+        uni_roll_no = session.get("student_roll_no")
         description = request.form.get("description")
         is_anonymous = (
             request.form.get("is_anonymous", "false").lower()
@@ -621,6 +621,35 @@ def create_complaint():
             "error": str(e)
 
         }), 500
+# ============================================================
+# STUDENT AUTHENTICATION
+# ============================================================
+
+@app.route("/student/login", methods=["GET", "POST"])
+def student_login():
+
+    if request.method == "GET":
+        return render_template("student_login.html")
+
+    roll_no = request.form.get("roll_no", "").strip()
+
+    if not roll_no:
+        return render_template(
+            "student_login.html",
+            error="University roll number is required."
+        ), 400
+
+    session["student_roll_no"] = roll_no
+
+    return redirect(url_for("home"))
+
+
+@app.route("/student/logout")
+def student_logout():
+
+    session.pop("student_roll_no", None)
+
+    return redirect(url_for("student_login"))
 
 # ============================================================
 # ADMIN AUTHENTICATION
