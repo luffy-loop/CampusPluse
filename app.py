@@ -633,9 +633,6 @@ def admin():
 @app.route("/api/admin/dashboard")
 def admin_dashboard():
 
-    conn = None
-    cursor = None
-
     try:
 
         # =============================
@@ -696,153 +693,96 @@ def admin_dashboard():
         # DATABASE MODE
         # =============================
 
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        complaints_col = get_complaints()
 
-        # Total complaints
+        total = complaints_col.count_documents({})
 
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM complaints;
-        """)
+        pending = complaints_col.count_documents({
+            "status": "Pending"
+        })
 
-        total = cursor.fetchone()[0]
+        high_priority = complaints_col.count_documents({
+            "priority": {
+                "$in": ["High", "Critical"]
+            }
+        })
 
-
-        # Pending complaints
-
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM complaints
-            WHERE status = 'Pending';
-        """)
-
-        pending = cursor.fetchone()[0]
-
-
-        # High / Critical complaints
-
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM complaints
-            WHERE priority IN ('High', 'Critical');
-        """)
-
-        high_priority = cursor.fetchone()[0]
-
-
-        # Resolved complaints
-
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM complaints
-            WHERE status = 'Resolved';
-        """)
-
-        resolved = cursor.fetchone()[0]
-
-
-        # Department distribution
-
-        cursor.execute("""
-            SELECT
-                COALESCE(department, 'Unassigned') AS department,
-                COUNT(*) AS count
-            FROM complaints
-            GROUP BY department
-            ORDER BY count DESC;
-        """)
+        resolved = complaints_col.count_documents({
+            "status": "Resolved"
+        })
 
         departments = [
-
             {
-                "department": row[0],
-                "count": row[1]
+                "department": row["_id"] or "Unassigned",
+                "count": row["count"]
             }
-
-            for row in cursor.fetchall()
-
+            for row in complaints_col.aggregate([
+                {
+                    "$group": {
+                        "_id": "$department",
+                        "count": {"$sum": 1}
+                    }
+                },
+                {
+                    "$sort": {
+                        "count": -1
+                    }
+                }
+            ])
         ]
 
-
-                # Recent complaints
-
-        cursor.execute("""
-            SELECT
-                id,
-                uni_roll_no,
-                description,
-                category,
-                department,
-                location,
-                severity,
-                priority,
-                status,
-                created_at,
-                evidence_path
-            FROM complaints
-            ORDER BY created_at DESC
-            LIMIT 20;
-        """)
-
-        rows = cursor.fetchall()
+        rows = complaints_col.find(
+            {},
+            {
+                "_id": 0,
+                "id": 1,
+                "uni_roll_no": 1,
+                "description": 1,
+                "category": 1,
+                "department": 1,
+                "location": 1,
+                "severity": 1,
+                "priority": 1,
+                "status": 1,
+                "created_at": 1,
+                "evidence_path": 1
+            }
+        ).sort("created_at", -1).limit(20)
 
         complaints = []
 
         for row in rows:
-
             complaints.append({
-
-                "id": row[0],
-
-                "uni_roll_no": row[1],
-
-                "description": row[2],
-
-                "category": row[3],
-
-                "department": row[4],
-
-                "location": row[5],
-
-                "severity": row[6],
-
-                "priority": row[7],
-
-                "status": row[8],
-
+                "id": row.get("id"),
+                "uni_roll_no": row.get("uni_roll_no"),
+                "description": row.get("description"),
+                "category": row.get("category"),
+                "department": row.get("department"),
+                "location": row.get("location"),
+                "severity": row.get("severity"),
+                "priority": row.get("priority"),
+                "status": row.get("status"),
                 "created_at": (
-                    row[9].strftime("%d %b %Y, %I:%M %p")
-                    if row[9]
+                    row["created_at"].strftime(
+                        "%d %b %Y, %I:%M %p"
+                    )
+                    if row.get("created_at")
                     else None
                 ),
-
-                "evidence_path": row[10]
-
+                "evidence_path": row.get("evidence_path")
             })
 
         return jsonify({
-
             "success": True,
-
             "stats": {
-
                 "total": total,
-
                 "pending": pending,
-
                 "high_priority": high_priority,
-
                 "resolved": resolved
-
             },
-
             "departments": departments,
-
             "complaints": complaints
-
         })
-
 
     except Exception as e:
 
@@ -854,14 +794,6 @@ def admin_dashboard():
 
         }), 500
 
-
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if conn:
-            conn.close()
 
 # ============================================================
 # UPDATE COMPLAINT STATUS
