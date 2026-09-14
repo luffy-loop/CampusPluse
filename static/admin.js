@@ -816,8 +816,7 @@ async function loadAIBriefing() {
     try {
 
     const response =
-        await fetch("https://campuspluse-z1ih.onrender.com/api/admin/briefing");
-
+        await fetch("/api/admin/briefing");
     const data =
         await response.json();
 
