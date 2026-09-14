@@ -1,9 +1,10 @@
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, session, redirect, url_for
 import os
 from werkzeug.utils import secure_filename
 from pathlib import Path
 from uuid import uuid4
 import json
+import hmac
 from dotenv import load_dotenv
 from google import genai
 from datetime import datetime
@@ -11,7 +12,26 @@ from mongodb import get_complaints, get_next_id
 load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
+def admin_auth():
+    if request.path == "/admin/login":
+        return None
 
+    if request.path == "/admin" or request.path.startswith("/api/admin/"):
+        if not session.get("admin"):
+            if request.path.startswith("/api/admin/"):
+                return jsonify({
+                    "success": False,
+                    "error": "Admin authentication required."
+                }), 401
+            return redirect(url_for("admin_login"))
+
+    return None
+
+
+@app.before_request
+def check_admin_auth():
+    return admin_auth()
 # ============================================================
 # DATABASE CONFIGURATION
 # ============================================================
@@ -602,7 +622,46 @@ def create_complaint():
 
         }), 500
 
+# ============================================================
+# ADMIN AUTHENTICATION
+# ============================================================
 
+@app.route("/admin/login", methods=["GET", "POST"])
+def admin_login():
+
+    if request.method == "GET":
+        return render_template("admin_login.html")
+
+    username = request.form.get("username", "")
+    password = request.form.get("password", "")
+
+    admin_username = os.getenv("ADMIN_USERNAME", "")
+    admin_password = os.getenv("ADMIN_PASSWORD", "")
+
+    if (
+        hmac.compare_digest(username, admin_username)
+        and hmac.compare_digest(password, admin_password)
+    ):
+        session["admin"] = True
+        return redirect(url_for("admin"))
+
+    return render_template(
+        "admin_login.html",
+        error="Invalid username or password."
+    ), 401
+
+
+@app.route("/admin/logout")
+def admin_logout():
+
+    session.clear()
+
+    return redirect(url_for("admin_login"))
+
+
+# ============================================================
+# ADMIN DASHBOARD
+# ============================================================
 # ============================================================
 # ADMIN DASHBOARD
 # ============================================================

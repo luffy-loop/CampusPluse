@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Campus Pulse | Admin Login</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='admin-login.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+    <main class="login-page">
+
+        <section class="login-card">
+
+            <div class="brand">
+
+                <div class="brand-mark">
+                    CP
+                </div>
+
+                <div>
+
+                    <h1>Campus Pulse</h1>
+
+                    <span>Admin Command Centre</span>
+
+                </div>
+
+            </div>
+
+
+            <div class="login-heading">
+
+                <p class="eyebrow">
+                    ADMINISTRATION
+                </p>
+
+                <h2>
+                    Welcome back
+                </h2>
+
+                <p>
+                    Sign in to access the campus
+                    complaint dashboard.
+                </p>
+
+            </div>
+
+
+            {% if error %}
+
+            <div class="error">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+            <form method="POST">
+
+                <div class="field">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input
+                        id="username"
+                        type="text"
+                        name="username"
+                        placeholder="Enter your username"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        id="password"
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+                <button type="submit">
+                    Sign In
+                </button>
+
+            </form>
+
+
+            <div class="footer">
+                Complaint Intelligence System
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
