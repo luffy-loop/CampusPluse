@@ -979,9 +979,6 @@ def track():
 @app.route("/api/complaints", methods=["GET"])
 def get_student_complaints():
 
-    conn = None
-    cursor = None
-
     try:
 
         uni_roll_no = request.args.get("uni_roll_no")
@@ -1033,89 +1030,56 @@ def get_student_complaints():
         # DATABASE MODE
         # =============================
 
-        conn = get_db_connection()
-        cursor = conn.cursor()
-
-
-        cursor.execute("""
-            SELECT
-                id,
-                description,
-                category,
-                department,
-                location,
-                severity,
-                priority,
-                issue_group,
-                recommended_action,
-                status,
-                created_at,
-                updated_at
-            FROM complaints
-            WHERE uni_roll_no = %s
-            ORDER BY created_at DESC;
-        """, (uni_roll_no,))
-
-
-        rows = cursor.fetchall()
-
+        rows = get_complaints().find(
+            {"uni_roll_no": uni_roll_no},
+            {
+                "_id": 0,
+                "id": 1,
+                "description": 1,
+                "category": 1,
+                "department": 1,
+                "location": 1,
+                "severity": 1,
+                "priority": 1,
+                "issue_group": 1,
+                "recommended_action": 1,
+                "status": 1,
+                "created_at": 1,
+                "updated_at": 1
+            }
+        ).sort("created_at", -1)
 
         complaints = []
 
-
         for row in rows:
-
             complaints.append({
-
-                "id": row[0],
-
-                "description": row[1],
-
-                "category": row[2],
-
-                "department": row[3],
-
-                "location": row[4],
-
-                "severity": row[5],
-
-                "priority": row[6],
-
-                "issue": row[7],
-
-                "recommended_action": row[8],
-
-                "status": row[9],
-
+                "id": row.get("id"),
+                "description": row.get("description"),
+                "category": row.get("category"),
+                "department": row.get("department"),
+                "location": row.get("location"),
+                "severity": row.get("severity"),
+                "priority": row.get("priority"),
+                "issue": row.get("issue_group"),
+                "recommended_action": row.get("recommended_action"),
+                "status": row.get("status"),
                 "created_at": (
-                    row[10].strftime(
-                        "%d %b %Y, %I:%M %p"
-                    )
-                    if row[10]
+                    row["created_at"].strftime("%d %b %Y, %I:%M %p")
+                    if row.get("created_at")
                     else None
                 ),
-
                 "updated_at": (
-                    row[11].strftime(
-                        "%d %b %Y, %I:%M %p"
-                    )
-                    if row[11]
+                    row["updated_at"].strftime("%d %b %Y, %I:%M %p")
+                    if row.get("updated_at")
                     else None
                 )
-
             })
 
-
         return jsonify({
-
             "success": True,
-
             "complaints": complaints,
-
             "count": len(complaints)
-
         })
-
 
     except Exception as e:
 
@@ -1128,21 +1092,10 @@ def get_student_complaints():
         }), 500
 
 
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if conn:
-            conn.close()
-
 
 
 @app.route("/api/complaints/<int:complaint_id>")
 def get_complaint(complaint_id):
-
-    conn = None
-    cursor = None
 
     try:
 
@@ -1182,47 +1135,30 @@ def get_complaint(complaint_id):
         # DATABASE MODE
         # =============================
 
-        conn = get_db_connection()
-        cursor = conn.cursor()
-
-        cursor.execute("""
-            SELECT
-                id,
-                category,
-                department,
-                location,
-                severity,
-                priority,
-                issue_group,
-                recommended_action,
-                status,
-                created_at
-            FROM complaints
-            WHERE id = %s;
-        """, (complaint_id,))
-
-        row = cursor.fetchone()
+        row = get_complaints().find_one(
+            {"id": complaint_id},
+            {"_id": 0}
+        )
 
         if not row:
-
             return jsonify({
                 "success": False,
                 "error": "Complaint not found."
             }), 404
 
         complaint = {
-            "id": row[0],
-            "category": row[1],
-            "department": row[2],
-            "location": row[3],
-            "severity": row[4],
-            "priority": row[5],
-            "issue": row[6],
-            "recommended_action": row[7],
-            "status": row[8],
+            "id": row.get("id"),
+            "category": row.get("category"),
+            "department": row.get("department"),
+            "location": row.get("location"),
+            "severity": row.get("severity"),
+            "priority": row.get("priority"),
+            "issue": row.get("issue_group"),
+            "recommended_action": row.get("recommended_action"),
+            "status": row.get("status"),
             "created_at": (
-                row[9].strftime("%d %b %Y, %I:%M %p")
-                if row[9]
+                row["created_at"].strftime("%d %b %Y, %I:%M %p")
+                if row.get("created_at")
                 else None
             )
         }
@@ -1238,14 +1174,6 @@ def get_complaint(complaint_id):
             "success": False,
             "error": str(e)
         }), 500
-
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if conn:
-            conn.close()
 
 # ============================================================
 # CAMPUS SIGNALS
