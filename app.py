@@ -8,6 +8,7 @@ import json
 from dotenv import load_dotenv
 from google import genai
 from datetime import datetime
+from mongodb import get_complaints, get_next_id
 load_dotenv()
 
 app = Flask(__name__)
@@ -397,8 +398,6 @@ def home():
 @app.route("/api/complaints", methods=["POST"])
 def create_complaint():
 
-    conn = None
-    cursor = None
     saved_file = None
     global mock_complaint_counter
 
@@ -568,108 +567,37 @@ def create_complaint():
         # DATABASE MODE
         # =============================
 
-        # Connect to PostgreSQL
+        complaint_id = get_next_id()
 
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        complaint = {
+            "id": complaint_id,
+            "uni_roll_no": uni_roll_no,
+            "description": description,
+            "category": category,
+            "department": department,
+            "location": location,
+            "severity": severity,
+            "priority": priority,
+            "issue_group": issue,
+            "recommended_action": recommended_action,
+            "is_anonymous": is_anonymous,
+            "evidence_path": evidence_path,
+            "status": "Pending",
+            "created_at": datetime.now(),
+            "updated_at": datetime.now()
+        }
 
-
-        # Insert everything
-
-        query = """
-
-            INSERT INTO complaints (
-
-                uni_roll_no,
-                description,
-                category,
-                department,
-                location,
-                severity,
-                priority,
-                issue_group,
-                recommended_action,
-                is_anonymous,
-                evidence_path
-
-            )
-
-            VALUES (
-
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s,
-                %s
-
-            )
-
-            RETURNING id;
-
-        """
-
-
-        cursor.execute(
-
-            query,
-
-            (
-
-                uni_roll_no,
-                description,
-                category,
-                department,
-                location,
-                severity,
-                priority,
-                issue,
-                recommended_action,
-                is_anonymous,
-                evidence_path
-
-            )
-
-        )
-
-
-        complaint_id = cursor.fetchone()[0]
-
-
-        conn.commit()
-
-
-        # Response
+        get_complaints().insert_one(complaint)
 
         return jsonify({
-
             "success": True,
-
             "id": complaint_id,
-
-            "message": (
-                "Complaint analyzed and "
-                "submitted successfully."
-            ),
-
+            "message": "Complaint analyzed and submitted successfully.",
             "analysis": analysis,
-
-            "evidence_uploaded": (
-                evidence_path is not None
-            )
-
+            "evidence_uploaded": evidence_path is not None
         })
 
-
     except Exception as e:
-
-        if conn:
-            conn.rollback()
 
 
         # Remove uploaded file if database
@@ -691,14 +619,6 @@ def create_complaint():
 
         }), 500
 
-
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if conn:
-            conn.close()
 
 # ============================================================
 # ADMIN DASHBOARD
