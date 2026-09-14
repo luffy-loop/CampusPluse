@@ -1119,7 +1119,10 @@ def get_complaint(complaint_id):
         # =============================
 
         row = get_complaints().find_one(
-            {"id": complaint_id},
+            {
+                "id": complaint_id,
+                "uni_roll_no": session.get("student_roll_no")
+            },
             {"_id": 0}
         )
 
