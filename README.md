@@ -80,3 +80,14 @@ CampusPluse/
     ├── student.html
     ├── student_login.html
     └── track.html
+## Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+MONGODB_DB=campuspluse
+GEMINI_API_KEY=your_gemini_api_key
+FLASK_SECRET_KEY=your_secret_key
+ADMIN_USERNAME=your_admin_username
+ADMIN_PASSWORD=your_admin_password
