@@ -20,12 +20,14 @@ The system uses AI to analyze complaints and assist with:
 ## Features
 
 ### Student Portal
+
 - Submit campus complaints
 - Attach supporting evidence
 - Track complaint status
 - View complaint history
 
 ### Admin Dashboard
+
 - View complaint statistics
 - Monitor recent complaints
 - Filter complaints
@@ -36,7 +38,9 @@ The system uses AI to analyze complaints and assist with:
 - Detect recurring campus issues
 
 ### AI Complaint Intelligence
+
 Gemini analyzes submitted complaints and determines:
+
 - Category
 - Responsible department
 - Location
@@ -65,12 +69,13 @@ CampusPluse/
 ├── mongodb.py
 ├── requirements.txt
 ├── static/
+│   ├── admin-login.css
 │   ├── admin.css
 │   ├── admin.js
 │   ├── landing.css
 │   ├── script.js
-│   ├── style.css
 │   ├── student-login.css
+│   ├── style.css
 │   ├── track.css
 │   └── track.js
 └── templates/
@@ -80,6 +85,7 @@ CampusPluse/
     ├── student.html
     ├── student_login.html
     └── track.html
+
 ## Environment Variables
 
 Create a `.env` file in the project root:
@@ -91,3 +97,44 @@ GEMINI_API_KEY=your_gemini_api_key
 FLASK_SECRET_KEY=your_secret_key
 ADMIN_USERNAME=your_admin_username
 ADMIN_PASSWORD=your_admin_password
+```
+
+Do not commit your `.env` file or expose your actual credentials.
+
+## Installation
+
+```bash
+git clone https://github.com/luffy-loop/CampusPluse.git
+cd CampusPluse
+python -m venv venv
+```
+
+Activate the virtual environment:
+
+### Windows PowerShell
+
+```powershell
+.\venv\Scripts\Activate.ps1
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Start the application:
+
+```bash
+python app.py
+```
+
+## Deployment
+
+CampusPluse is deployed using Render.
+
+**Live Demo:** https://campuspluse-z1ih.onrender.com/
+
+## Status
+
+CampusPluse is a project prototype demonstrating AI-assisted complaint management, MongoDB persistence, student access, and administrative monitoring.
