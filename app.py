@@ -1254,25 +1254,23 @@ def admin_briefing():
         # DATABASE MODE
         # =============================
 
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        complaints_col = get_complaints()
 
-        # Get recent complaints
-        cursor.execute("""
-            SELECT
-                category,
-                department,
-                location,
-                severity,
-                priority,
-                issue_group,
-                status
-            FROM complaints
-            ORDER BY created_at DESC
-            LIMIT 30;
-        """)
+        rows = complaints_col.find(
+            {},
+            {
+                "_id": 0,
+                "category": 1,
+                "department": 1,
+                "location": 1,
+                "severity": 1,
+                "priority": 1,
+                "issue_group": 1,
+                "status": 1
+            }
+        ).sort("created_at", -1).limit(30)
 
-        rows = cursor.fetchall()
+        rows = list(rows)
 
         if not rows:
 
@@ -1287,13 +1285,13 @@ def admin_briefing():
         for row in rows:
 
             complaints.append({
-                "category": row[0],
-                "department": row[1],
-                "location": row[2],
-                "severity": row[3],
-                "priority": row[4],
-                "issue": row[5],
-                "status": row[6]
+                "category": row.get("category"),
+                "department": row.get("department"),
+                "location": row.get("location"),
+                "severity": row.get("severity"),
+                "priority": row.get("priority"),
+                "issue": row.get("issue_group"),
+                "status": row.get("status")
             })
 
 
