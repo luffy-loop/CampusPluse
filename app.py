@@ -964,7 +964,7 @@ def get_student_complaints():
 
     try:
 
-        uni_roll_no = request.args.get("uni_roll_no")
+        uni_roll_no = session.get("student_roll_no")
 
         if not uni_roll_no:
 
