@@ -1094,9 +1094,6 @@ def get_complaint(complaint_id):
 @app.route("/api/admin/signals")
 def campus_signals():
 
-    conn = None
-    cursor = None
-
     try:
 
         # =============================
@@ -1115,62 +1112,96 @@ def campus_signals():
         # DATABASE MODE
         # =============================
 
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        complaints_col = get_complaints()
 
-        cursor.execute("""
-            SELECT
-                category,
-                department,
-                location,
-                COUNT(*) AS complaint_count,
-ROUND(AVG(severity)::numeric, 1) AS average_severity,                MAX(
-                    CASE
-                        WHEN priority = 'Critical' THEN 4
-                        WHEN priority = 'High' THEN 3
-                        WHEN priority = 'Medium' THEN 2
-                        WHEN priority = 'Low' THEN 1
-                        ELSE 0
-                    END
-                ) AS priority_level
-            FROM complaints
-            WHERE location IS NOT NULL
-              AND location <> 'Unknown'
-            GROUP BY
-                category,
-                department,
-                location
-            HAVING COUNT(*) >= 2
-            ORDER BY
-                complaint_count DESC,
-                average_severity DESC
-            LIMIT 10;
-        """)
+        priority_map = {
+            4: "Critical",
+            3: "High",
+            2: "Medium",
+            1: "Low",
+            0: "Unknown"
+        }
 
-        rows = cursor.fetchall()
+        rows = complaints_col.aggregate([
+            {
+                "$match": {
+                    "location": {
+                        "$nin": [None, "Unknown"]
+                    }
+                }
+            },
+            {
+                "$group": {
+                    "_id": {
+                        "category": "$category",
+                        "department": "$department",
+                        "location": "$location"
+                    },
+                    "complaint_count": {
+                        "$sum": 1
+                    },
+                    "average_severity": {
+                        "$avg": "$severity"
+                    },
+                    "priority_level": {
+                        "$max": {
+                            "$switch": {
+                                "branches": [
+                                    {
+                                        "case": {"$eq": ["$priority", "Critical"]},
+                                        "then": 4
+                                    },
+                                    {
+                                        "case": {"$eq": ["$priority", "High"]},
+                                        "then": 3
+                                    },
+                                    {
+                                        "case": {"$eq": ["$priority", "Medium"]},
+                                        "then": 2
+                                    },
+                                    {
+                                        "case": {"$eq": ["$priority", "Low"]},
+                                        "then": 1
+                                    }
+                                ],
+                                "default": 0
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "$match": {
+                    "complaint_count": {
+                        "$gte": 2
+                    }
+                }
+            },
+            {
+                "$sort": {
+                    "complaint_count": -1,
+                    "average_severity": -1
+                }
+            },
+            {
+                "$limit": 10
+            }
+        ])
 
         signals = []
 
         for row in rows:
-
-            priority_map = {
-                4: "Critical",
-                3: "High",
-                2: "Medium",
-                1: "Low",
-                0: "Unknown"
-            }
-
             signals.append({
-                "category": row[0],
-                "department": row[1],
-                "location": row[2],
-                "complaint_count": row[3],
-                "average_severity": float(row[4])
-                    if row[4] is not None
-                    else 0,
+                "category": row["_id"].get("category"),
+                "department": row["_id"].get("department"),
+                "location": row["_id"].get("location"),
+                "complaint_count": row["complaint_count"],
+                "average_severity": round(
+                    float(row["average_severity"]),
+                    1
+                ) if row["average_severity"] is not None else 0,
                 "priority": priority_map.get(
-                    row[5],
+                    row["priority_level"],
                     "Unknown"
                 )
             })
@@ -1186,14 +1217,6 @@ ROUND(AVG(severity)::numeric, 1) AS average_severity,                MAX(
             "success": False,
             "error": str(e)
         }), 500
-
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if conn:
-            conn.close()
 
 # ============================================================
 # AI CAMPUS BRIEFING
