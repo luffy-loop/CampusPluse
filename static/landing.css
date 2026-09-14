@@ -1,0 +1,355 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --primary: #5146e5;
+    --primary-dark: #4038b8;
+    --text: #14213d;
+    --muted: #667085;
+    --border: #e5e7eb;
+    --background: #f5f7fc;
+    --card: #ffffff;
+}
+
+body {
+    min-height: 100vh;
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    color: var(--text);
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(81, 70, 229, 0.13),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(124, 58, 237, 0.10),
+            transparent 30%
+        ),
+        var(--background);
+}
+
+.landing-page {
+    width: min(1180px, 100%);
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 28px 28px 22px;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-mark {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    background: linear-gradient(135deg, #5b50e8, #493ed0);
+    color: white;
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    box-shadow: 0 8px 20px rgba(81, 70, 229, 0.22);
+}
+
+.brand strong {
+    display: block;
+    font-size: 16px;
+    font-weight: 850;
+}
+
+.brand span {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 70px 0 45px;
+}
+
+.hero-content {
+    max-width: 760px;
+    margin: 0 auto 48px;
+    text-align: center;
+}
+
+.eyebrow {
+    margin-bottom: 14px;
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: 2.5px;
+}
+
+.hero h1 {
+    font-size: clamp(38px, 6vw, 64px);
+    line-height: 1.04;
+    letter-spacing: -2.8px;
+    font-weight: 900;
+}
+
+.hero h1 span {
+    color: var(--primary);
+}
+
+.hero-text {
+    max-width: 620px;
+    margin: 22px auto 0;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.portal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    width: 100%;
+}
+
+.portal-card {
+    position: relative;
+    min-height: 245px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 26px;
+    border: 1px solid rgba(229, 231, 235, 0.95);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow:
+        0 18px 45px rgba(16, 24, 40, 0.07),
+        0 3px 10px rgba(16, 24, 40, 0.03);
+    text-decoration: none;
+    color: var(--text);
+    overflow: hidden;
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease,
+        border-color 0.22s ease;
+}
+
+.portal-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary);
+}
+
+.portal-card:hover {
+    transform: translateY(-6px);
+    border-color: #d9d6ff;
+    box-shadow:
+        0 25px 55px rgba(16, 24, 40, 0.11),
+        0 5px 14px rgba(16, 24, 40, 0.04);
+}
+
+.portal-icon {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: #eeecff;
+    color: var(--primary);
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.portal-label {
+    margin-bottom: 7px;
+    color: var(--primary);
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: 1.3px;
+}
+
+.portal-card h2 {
+    margin-bottom: 8px;
+    font-size: 21px;
+    font-weight: 850;
+    letter-spacing: -0.4px;
+}
+
+.portal-card p:not(.portal-label) {
+    max-width: 290px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.portal-arrow {
+    position: absolute;
+    right: 25px;
+    bottom: 24px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f1f0ff;
+    color: var(--primary);
+    font-size: 16px;
+    font-weight: 800;
+    transition:
+        transform 0.22s ease,
+        background 0.22s ease;
+}
+
+.portal-card:hover .portal-arrow {
+    transform: translateX(4px);
+    background: #e7e4ff;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 780px;
+    width: 100%;
+    margin: 38px auto 0;
+    padding: 20px 0;
+    border-top: 1px solid rgba(208, 213, 221, 0.75);
+    border-bottom: 1px solid rgba(208, 213, 221, 0.75);
+}
+
+.features div {
+    padding: 0 25px;
+    text-align: center;
+}
+
+.features div + div {
+    border-left: 1px solid #e4e7ec;
+}
+
+.features strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.features span {
+    color: var(--muted);
+    font-size: 10px;
+}
+
+footer {
+    padding-top: 20px;
+    text-align: center;
+    color: #98a2b3;
+    font-size: 10px;
+}
+
+@media (max-width: 850px) {
+
+    .hero {
+        padding-top: 55px;
+    }
+
+    .portal-grid {
+        grid-template-columns: 1fr;
+        max-width: 620px;
+        margin: 0 auto;
+    }
+
+    .portal-card {
+        min-height: 205px;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .landing-page {
+        padding: 20px 15px;
+    }
+
+    .hero {
+        padding: 48px 0 30px;
+    }
+
+    .hero-content {
+        margin-bottom: 34px;
+    }
+
+    .hero h1 {
+        font-size: 39px;
+        letter-spacing: -1.8px;
+    }
+
+    .hero-text {
+        font-size: 14px;
+    }
+
+    .features {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .features div {
+        padding: 0;
+    }
+
+    .features div + div {
+        border-left: none;
+    }
+
+}
+
+@media (max-width: 420px) {
+
+    .brand-mark {
+        width: 40px;
+        height: 40px;
+    }
+
+    .brand strong {
+        font-size: 15px;
+    }
+
+    .brand span {
+        font-size: 9px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+
+    .portal-card {
+        padding: 22px;
+    }
+
+}

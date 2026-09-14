@@ -2,242 +2,172 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Campus Pulse | Student Complaint Centre
-    </title>
+    <title>Campus Pulse | Campus Complaint System</title>
 
     <link
         rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}"
+        href="{{ url_for('static', filename='landing.css') }}"
     >
-
 </head>
-
 
 <body>
 
-    <main class="container">
+    <main class="landing-page">
 
+        <nav class="navbar">
 
-        <!-- HEADER -->
-
-        <div class="header">
-
-            <p class="eyebrow">
-                CAMPUS PULSE
-            </p>
-
-            <h1>
-                Student Complaint Centre
-            </h1>
-
-            <p class="subtitle">
-                Tell us what happened. We'll help route your complaint to the right place.
-            </p>
-
-        </div>
-
-
-
-        <!-- COMPLAINT FORM -->
-
-        <form id="complaintForm">
-
-
-            <!-- ROLL NUMBER -->
-
-            <div class="field">
-
-                <label for="rollNo">
-                    University Roll Number
-                </label>
-
-                <input
-                    type="text"
-                    id="rollNo"
-                    placeholder="Example: 2510040024"
-                    required
-                >
-
-            </div>
-
-
-
-            <!-- DESCRIPTION -->
-
-            <div class="field">
-
-                <label for="description">
-                    What happened?
-                </label>
-
-                <textarea
-                    id="description"
-                    placeholder="Describe your issue in your own words..."
-                    required
-                ></textarea>
-
-            </div>
-
-
-
-            <!-- ANONYMOUS OPTION -->
-
-            <div class="anonymous-box">
+            <div class="brand">
+                <div class="brand-mark">CP</div>
 
                 <div>
-
-                    <strong>
-                        Submit anonymously
-                    </strong>
-
-                    <p>
-                        Your identity will not be displayed to the department.
-                    </p>
-
+                    <strong>Campus Pulse</strong>
+                    <span>Complaint Intelligence System</span>
                 </div>
+            </div>
+
+        </nav>
 
 
-                <label class="switch">
+        <section class="hero">
 
-                    <input
-                        type="checkbox"
-                        id="anonymous"
-                    >
+            <div class="hero-content">
 
-                    <span class="slider"></span>
+                <p class="eyebrow">
+                    CAMPUS COMPLAINT INTELLIGENCE
+                </p>
 
-                </label>
+                <h1>
+                    Make your campus<br>
+                    <span>better, one complaint at a time.</span>
+                </h1>
+
+                <p class="hero-text">
+                    Report campus issues, track your complaints,
+                    and help departments respond faster with
+                    intelligent complaint routing.
+                </p>
 
             </div>
 
 
+            <div class="portal-grid">
 
-            <!-- EVIDENCE UPLOAD -->
+                <a href="{{ url_for('student_login') }}" class="portal-card student-card">
 
-            <div class="field evidence-field">
+                    <div class="portal-icon">
+                        →
+                    </div>
 
-    <label>
-        Attach Evidence
-        <span class="optional">Optional</span>
-    </label>
+                    <div>
+                        <p class="portal-label">
+                            FOR STUDENTS
+                        </p>
 
-    <label for="evidence" class="evidence-upload">
+                        <h2>
+                            Student Portal
+                        </h2>
 
-        <div class="upload-icon">
-            +
-        </div>
+                        <p>
+                            Submit complaints, attach evidence,
+                            and view your complaint history.
+                        </p>
+                    </div>
 
-        <div class="upload-content">
-            <strong id="fileName">
-                Attach a file
-            </strong>
+                    <span class="portal-arrow">
+                        →
+                    </span>
 
-            <span id="fileHelp">
-                Photo, screenshot or PDF
-            </span>
-        </div>
-
-        <input
-            type="file"
-            id="evidence"
-            name="evidence"
-            accept=".png,.jpg,.jpeg,.webp,.pdf"
-        >
-
-    </label>
-
-</div>
+                </a>
 
 
-            <!-- SUBMIT -->
+                <a href="{{ url_for('track') }}" class="portal-card track-card">
 
-            <button
-                type="submit"
-                id="submitBtn"
-            >
-                Submit Complaint
-            </button>
+                    <div class="portal-icon">
+                        ✓
+                    </div>
 
+                    <div>
+                        <p class="portal-label">
+                            COMPLAINT STATUS
+                        </p>
 
-        </form>
+                        <h2>
+                            Track Complaint
+                        </h2>
 
+                        <p>
+                            Follow the progress and current status
+                            of your submitted complaints.
+                        </p>
+                    </div>
 
+                    <span class="portal-arrow">
+                        →
+                    </span>
 
-        <!-- RESULT -->
-
-        <div id="result"></div>
-        <!-- MY COMPLAINTS -->
-
-<section class="my-complaints">
-
-    <div class="my-complaints-header">
-
-        <div>
-
-            <p class="eyebrow">
-                TRACKING
-            </p>
-
-            <h2>
-                My Complaints
-            </h2>
-
-            <p class="my-complaints-subtitle">
-                View the complaints submitted using your university roll number.
-            </p>
-
-        </div>
-
-        <button
-            type="button"
-            id="loadComplaintsBtn"
-            class="secondary-btn"
-        >
-            View My Complaints
-        </button>
-
-    </div>
+                </a>
 
 
-    <div
-        id="myComplaintsList"
-        class="my-complaints-list"
-    >
+                <a href="{{ url_for('admin_login') }}" class="portal-card admin-card">
 
-        <div class="empty-complaints">
+                    <div class="portal-icon">
+                        ◇
+                    </div>
 
-            <strong>
-                Your complaints will appear here
-            </strong>
+                    <div>
+                        <p class="portal-label">
+                            FOR ADMINISTRATORS
+                        </p>
 
-            <p>
-                Submit a complaint first, then click
-                "View My Complaints".
-            </p>
+                        <h2>
+                            Admin Dashboard
+                        </h2>
 
-        </div>
+                        <p>
+                            Manage complaints, monitor campus
+                            signals, and view intelligent insights.
+                        </p>
+                    </div>
 
-    </div>
+                    <span class="portal-arrow">
+                        →
+                    </span>
 
-</section>
+                </a>
+
+            </div>
+
+
+            <section class="features">
+
+                <div>
+                    <strong>AI Powered</strong>
+                    <span>Intelligent complaint classification</span>
+                </div>
+
+                <div>
+                    <strong>Trackable</strong>
+                    <span>Real-time complaint status</span>
+                </div>
+
+                <div>
+                    <strong>Secure</strong>
+                    <span>Student and admin authentication</span>
+                </div>
+
+            </section>
+
+        </section>
+
+
+        <footer>
+            Campus Pulse · Campus Complaint Intelligence System
+        </footer>
 
     </main>
-
-
-
-    <script
-        src="{{ url_for('static', filename='script.js') }}"
-    ></script>
-
 
 </body>
 

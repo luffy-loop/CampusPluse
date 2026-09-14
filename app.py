@@ -389,6 +389,12 @@ def home():
 
     return render_template("index.html")
 
+@app.route("/student")
+def student_portal():
+    if not session.get("student_roll_no"):
+        return redirect(url_for("student_login"))
+
+    return render_template("student.html")
 
 # ============================================================
 # SUBMIT COMPLAINT
@@ -640,8 +646,7 @@ def student_login():
         ), 400
 
     session["student_roll_no"] = roll_no
-
-    return redirect(url_for("home"))
+    return redirect(url_for("student_portal"))
 
 
 @app.route("/student/logout")
@@ -945,13 +950,13 @@ def update_complaint_status(complaint_id):
             "success": False,
             "error": str(e)
         }), 500
-
-        # ============================================================
+# ============================================================
 # STUDENT COMPLAINT TRACKING
 # ============================================================
-
 @app.route("/track")
 def track():
+    if not session.get("student_roll_no"):
+        return redirect(url_for("student_login"))
 
     return render_template("track.html")
 
