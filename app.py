@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request, render_template
-import psycopg2
 import os
 from werkzeug.utils import secure_filename
 from pathlib import Path
@@ -59,22 +58,6 @@ def allowed_file(filename):
 client = genai.Client(
     api_key=os.getenv("GEMINI_API_KEY")
 )
-
-
-# ============================================================
-# DATABASE CONNECTION
-# ============================================================
-
-def get_db_connection():
-    if DISABLE_DB:
-        raise Exception("Database is disabled for testing/deployment.")
-
-    database_url = os.getenv("DATABASE_URL")
-
-    if not database_url:
-        raise Exception("DATABASE_URL is not configured.")
-
-    return psycopg2.connect(database_url)
 
 
 # ============================================================
