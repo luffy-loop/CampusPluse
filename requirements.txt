@@ -1,5 +1,6 @@
 Flask
 psycopg2-binary
+pymongo
 python-dotenv
 google-genai
 Werkzeug
