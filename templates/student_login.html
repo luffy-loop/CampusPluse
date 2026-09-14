@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Campus Pulse | Student Login</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='student-login.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+    <main class="login-page">
+
+        <section class="login-card">
+
+            <div class="brand">
+
+                <div class="brand-mark">
+                    CP
+                </div>
+
+                <div>
+
+                    <h1>Campus Pulse</h1>
+
+                    <span>Student Complaint Centre</span>
+
+                </div>
+
+            </div>
+
+
+            <div class="login-heading">
+
+                <p class="eyebrow">
+                    STUDENT ACCESS
+                </p>
+
+                <h2>
+                    Welcome
+                </h2>
+
+                <p>
+                    Enter your university roll number
+                    to access your complaint centre.
+                </p>
+
+            </div>
+
+
+            {% if error %}
+
+            <div class="error">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+            <form method="POST">
+
+                <div class="field">
+
+                    <label for="roll_no">
+                        University Roll Number
+                    </label>
+
+                    <input
+                        id="roll_no"
+                        type="text"
+                        name="roll_no"
+                        placeholder="Example: 2510040024"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                <button type="submit">
+                    Continue
+                </button>
+
+            </form>
+
+
+            <div class="footer">
+                Complaint Intelligence System
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
