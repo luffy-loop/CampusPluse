@@ -17,17 +17,18 @@ def student_login():
             error="University roll number is required."
         ), 400
 
-    if not re.fullmatch(r"[A-Z0-9]+", roll_no):
+    if len(roll_no) > 32 or not re.fullmatch(r"[A-Z0-9]+", roll_no):
         return render_template(
             "student_login.html",
             error="Enter a valid university roll number."
         ), 400
 
+    session.clear()
     session["student_roll_no"] = roll_no
     return redirect(url_for("student_portal"))
 
 
 @auth_bp.route("/student/logout")
 def student_logout():
-    session.pop("student_roll_no", None)
+    session.clear()
     return redirect(url_for("auth.student_login"))
