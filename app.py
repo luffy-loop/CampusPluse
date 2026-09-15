@@ -18,6 +18,7 @@ from config import (
     ALLOWED_EXTENSIONS,
     FLASK_SECRET_KEY
 )
+from google import genai
 
 app = Flask(__name__)
 app.register_blueprint(auth_bp)
@@ -68,23 +69,9 @@ def student_portal():
 
     return render_template("student.html")
 
-
-# ============================================================
-# AI CAMPUS BRIEFING
-# ============================================================
-
 @app.route("/api/admin/briefing")
 def admin_briefing():
-
-    conn = None
-    cursor = None
-
     try:
-
-        # =============================
-        # MOCK MODE (DB DISABLED)
-        # =============================
-        
         if DISABLE_DB:
             return jsonify({
                 "success": True,
@@ -99,11 +86,6 @@ def admin_briefing():
                 },
                 "mode": "mock"
             })
-
-
-        # =============================
-        # DATABASE MODE
-        # =============================
 
         complaints_col = get_complaints()
 
@@ -124,17 +106,14 @@ def admin_briefing():
         rows = list(rows)
 
         if not rows:
-
             return jsonify({
                 "success": True,
                 "briefing": "No complaints have been submitted yet."
             })
 
-
         complaints = []
 
         for row in rows:
-
             complaints.append({
                 "category": row.get("category"),
                 "department": row.get("department"),
@@ -144,7 +123,6 @@ def admin_briefing():
                 "issue": row.get("issue_group"),
                 "status": row.get("status")
             })
-
 
         briefing_prompt = f"""
 You are the AI operations analyst for Campus Pulse,
@@ -189,53 +167,25 @@ Return ONLY valid JSON in this format:
 }}
 """
 
+        client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
         response = client.interactions.create(
-
             model="gemini-3.6-flash",
-
             input=briefing_prompt,
-
             response_format={
                 "type": "text",
                 "mime_type": "application/json",
-
                 "schema": {
-
                     "type": "object",
-
                     "properties": {
-
-                        "headline": {
-                            "type": "string"
-                        },
-
-                        "summary": {
-                            "type": "string"
-                        },
-
-                        "top_issue": {
-                            "type": "string"
-                        },
-
-                        "affected_location": {
-                            "type": "string"
-                        },
-
-                        "affected_department": {
-                            "type": "string"
-                        },
-
-                        "recommended_action": {
-                            "type": "string"
-                        },
-
-                        "urgency": {
-                            "type": "string"
-                        }
-
+                        "headline": {"type": "string"},
+                        "summary": {"type": "string"},
+                        "top_issue": {"type": "string"},
+                        "affected_location": {"type": "string"},
+                        "affected_department": {"type": "string"},
+                        "recommended_action": {"type": "string"},
+                        "urgency": {"type": "string"}
                     },
-
                     "required": [
                         "headline",
                         "summary",
@@ -245,89 +195,52 @@ Return ONLY valid JSON in this format:
                         "recommended_action",
                         "urgency"
                     ]
-
                 }
             }
         )
 
-
-        briefing = json.loads(
-            response.output_text
-        )
-
+        briefing = json.loads(response.output_text)
 
         return jsonify({
-
             "success": True,
-
             "briefing": briefing
-
         })
 
-
     except Exception as e:
-
         return jsonify({
-
             "success": False,
-
             "error": str(e)
-
         }), 500
-
-
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if conn:
-            conn.close()
-
-# ============================================================
-# COMPLAINT SLA
-# ============================================================
 
 @app.route("/api/admin/complaints/<int:complaint_id>/sla")
 def complaint_sla(complaint_id):
-
     try:
-
-        # =============================
-        # MOCK MODE (DB DISABLED)
-        # =============================
-        
         if DISABLE_DB:
             if complaint_id not in mock_complaints:
                 return jsonify({
                     "success": False,
                     "error": "Complaint not found."
                 }), 404
-            
+
             c = mock_complaints[complaint_id]
             priority = c.get("priority", "Medium")
             status = c.get("status", "Pending")
             created_at = c.get("created_at", datetime.now())
             updated_at = c.get("updated_at", datetime.now())
-            
+
             sla_hours = {
                 "Critical": 2,
                 "High": 4,
                 "Medium": 12,
                 "Low": 24
             }
-            
+
             target_hours = sla_hours.get(priority, 12)
-            
-            if status == "Resolved":
-                end_time = updated_at
-            else:
-                end_time = datetime.now()
-            
+            end_time = updated_at if status == "Resolved" else datetime.now()
             elapsed_seconds = (end_time - created_at).total_seconds()
             elapsed_hours = elapsed_seconds / 3600
             remaining_hours = target_hours - elapsed_hours
-            
+
             if status == "Resolved":
                 sla_status = "Resolved"
             elif remaining_hours <= 0:
@@ -336,9 +249,9 @@ def complaint_sla(complaint_id):
                 sla_status = "At Risk"
             else:
                 sla_status = "On Track"
-            
+
             progress = min(100, max(0, (elapsed_hours / target_hours) * 100))
-            
+
             return jsonify({
                 "success": True,
                 "complaint_id": complaint_id,
@@ -351,11 +264,6 @@ def complaint_sla(complaint_id):
                 "sla_status": sla_status,
                 "mode": "mock"
             })
-
-
-        # =============================
-        # DATABASE MODE
-        # =============================
 
         row = get_complaints().find_one(
             {"id": complaint_id},
@@ -370,144 +278,56 @@ def complaint_sla(complaint_id):
         )
 
         if not row:
-
             return jsonify({
                 "success": False,
                 "error": "Complaint not found."
             }), 404
 
-
         priority = row.get("priority") or "Medium"
         status = row.get("status") or "Pending"
         created_at = row.get("created_at")
 
-
-        # SLA TARGET
-
         sla_hours = {
-
             "Critical": 2,
-
             "High": 4,
-
             "Medium": 12,
-
             "Low": 24
-
         }
 
-
-        target_hours = sla_hours.get(
-            priority,
-            12
-        )
-
-
-        # RESOLVED COMPLAINT
+        target_hours = sla_hours.get(priority, 12)
+        end_time = row.get("updated_at") or datetime.now() if status == "Resolved" else datetime.now()
+        elapsed_seconds = (end_time - created_at).total_seconds()
+        elapsed_hours = elapsed_seconds / 3600
+        remaining_hours = target_hours - elapsed_hours
 
         if status == "Resolved":
-
-            end_time = row.get("updated_at") or datetime.now()
-
-        else:
-
-            end_time = datetime.now()
-
-
-        # ELAPSED TIME
-
-        elapsed_seconds = (
-            end_time - created_at
-        ).total_seconds()
-
-        elapsed_hours = (
-            elapsed_seconds / 3600
-        )
-
-
-        remaining_hours = (
-            target_hours - elapsed_hours
-        )
-
-
-        # SLA STATUS
-
-        if status == "Resolved":
-
             sla_status = "Resolved"
-
         elif remaining_hours <= 0:
-
             sla_status = "Breached"
-
-        elif remaining_hours <= (
-            target_hours * 0.25
-        ):
-
+        elif remaining_hours <= (target_hours * 0.25):
             sla_status = "At Risk"
-
         else:
-
             sla_status = "On Track"
 
-
-        progress = min(
-            100,
-            max(
-                0,
-                (elapsed_hours / target_hours) * 100
-            )
-        )
-
+        progress = min(100, max(0, (elapsed_hours / target_hours) * 100))
 
         return jsonify({
-
             "success": True,
-
             "complaint_id": complaint_id,
-
             "priority": priority,
-
             "status": status,
-
             "target_hours": target_hours,
-
-            "elapsed_hours": round(
-                elapsed_hours,
-                1
-            ),
-
-            "remaining_hours": round(
-                max(0, remaining_hours),
-                1
-            ),
-
-            "progress": round(
-                progress,
-                1
-            ),
-
+            "elapsed_hours": round(elapsed_hours, 1),
+            "remaining_hours": round(max(0, remaining_hours), 1),
+            "progress": round(progress, 1),
             "sla_status": sla_status
-
         })
 
-
     except Exception as e:
-
         return jsonify({
-
             "success": False,
-
             "error": str(e)
-
         }), 500
 
-
-                           
-# ============================================================
-# START SERVER
-# ============================================================
-
 if __name__ == "__main__":
-
     app.run(debug=True)
