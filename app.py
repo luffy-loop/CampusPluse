@@ -206,10 +206,10 @@ Return ONLY valid JSON in this format:
             "briefing": briefing
         })
 
-    except Exception as e:
+    except Exception:
         return jsonify({
             "success": False,
-            "error": str(e)
+            "error": "Unable to generate the admin briefing right now."
         }), 500
 
 @app.route("/api/admin/complaints/<int:complaint_id>/sla")
@@ -333,10 +333,10 @@ def complaint_sla(complaint_id):
             "sla_status": sla_status
         })
 
-    except Exception as e:
+    except Exception:
         return jsonify({
             "success": False,
-            "error": str(e)
+            "error": "Unable to calculate the complaint SLA right now."
         }), 500
 
 if __name__ == "__main__":
