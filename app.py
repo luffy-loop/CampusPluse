@@ -64,7 +64,7 @@ def home():
 @app.route("/student")
 def student_portal():
     if not session.get("student_roll_no"):
-        return redirect(url_for("student_login"))
+        return redirect(url_for("auth.student_login"))
 
     return render_template("student.html")
 
