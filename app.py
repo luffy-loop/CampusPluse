@@ -26,7 +26,6 @@ app.register_blueprint(admin_bp)
 app.register_blueprint(tracking_bp)
 app.secret_key = FLASK_SECRET_KEY
 
-
 def admin_auth():
     if request.path == "/admin/login":
         return None
@@ -38,7 +37,8 @@ def admin_auth():
                     "success": False,
                     "error": "Admin authentication required."
                 }), 401
-                return redirect(url_for("admin.admin_login"))
+            return redirect(url_for("admin.admin_login"))
+
     return None
 
 @app.before_request
