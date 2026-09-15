@@ -101,6 +101,36 @@ Recommended Action:
 Inspect network connectivity and restore service.
 ```
 
+## Screenshots
+
+### CampusPluse Landing Page
+
+![CampusPluse Landing Page](screenshots/Screenshot%202026-09-15%20193537.png)
+
+### Student Portal
+
+![CampusPluse Student Portal](screenshots/Screenshot%202026-09-15%20193558.png)
+
+### Complaint Submission
+
+![CampusPluse Complaint Submission](screenshots/Screenshot%202026-09-15%20193632.png)
+
+### Complaint Tracking
+
+![CampusPluse Complaint Tracking](screenshots/Screenshot%202026-09-15%20193729.png)
+
+### Student Complaint History
+
+![CampusPluse Complaint History](screenshots/Screenshot%202026-09-15%20193745.png)
+
+### Admin Dashboard
+
+![CampusPluse Admin Dashboard](screenshots/Screenshot%202026-09-15%20193835.png)
+
+### Admin Complaint Management
+
+![CampusPluse Admin Complaint Management](screenshots/Screenshot%202026-09-15%20193847.png)
+
 ## Tech Stack
 
 ### Backend
