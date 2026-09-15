@@ -4,7 +4,12 @@ from google import genai
 from dotenv import load_dotenv
 load_dotenv()
 
+client = None
+
+
 def analyze_complaint(description):
+
+    global client
 
     prompt = f"""
     You are the AI complaint classification engine for Campus Pulse,
@@ -201,57 +206,44 @@ def analyze_complaint(description):
         "recommended_action": "..."
     }}
     """
-    client = genai.Client(
-        api_key=os.getenv("GEMINI_API_KEY")
-    )
+
+    if client is None:
+        client = genai.Client(
+            api_key=os.getenv("GEMINI_API_KEY")
+        )
 
     response = client.interactions.create(
         model="gemini-3.6-flash",
-
         input=prompt,
-
         response_format={
             "type": "text",
             "mime_type": "application/json",
-
             "schema": {
-
                 "type": "object",
-
                 "properties": {
-
                     "category": {
                         "type": "string"
                     },
-
                     "department": {
                         "type": "string"
                     },
-
                     "location": {
                         "type": "string"
                     },
-
                     "severity": {
                         "type": "integer"
                     },
-
                     "priority": {
                         "type": "string"
                     },
-
                     "issue": {
                         "type": "string"
                     },
-
                     "recommended_action": {
                         "type": "string"
                     }
-
                 },
-
                 "required": [
-
                     "category",
                     "department",
                     "location",
@@ -259,7 +251,6 @@ def analyze_complaint(description):
                     "priority",
                     "issue",
                     "recommended_action"
-
                 ]
             }
         }
@@ -277,6 +268,7 @@ def analyze_complaint(description):
             "issue": description[:100],
             "recommended_action": "Review and assign this complaint manually."
         }
+
     ALLOWED_CATEGORIES = {
         "Infrastructure",
         "IT & Network",
@@ -304,6 +296,7 @@ def analyze_complaint(description):
         "Student Affairs",
         "General Administration"
     }
+
     if analysis.get("category") not in ALLOWED_CATEGORIES:
         analysis["category"] = "Other"
 
