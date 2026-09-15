@@ -16,7 +16,8 @@ from config import (
     DISABLE_DB,
     UPLOAD_FOLDER,
     ALLOWED_EXTENSIONS,
-    FLASK_SECRET_KEY
+    FLASK_SECRET_KEY,
+    MAX_CONTENT_LENGTH
 )
 from google import genai
 
@@ -26,10 +27,10 @@ app.register_blueprint(complaints_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(tracking_bp)
 app.secret_key = FLASK_SECRET_KEY
-app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
+app.config["MAX_CONTENT_LENGTH"] = MAX_CONTENT_LENGTH
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
-app.config["SESSION_COOKIE_SECURE"] = os.getenv("RENDER", "").lower() == "true"
+app.config["SESSION_COOKIE_SECURE"] = bool(os.getenv("RENDER"))
 
 def admin_auth():
     if request.path == "/admin/login":
