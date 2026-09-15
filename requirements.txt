@@ -5,3 +5,5 @@ google-genai
 Werkzeug
 gunicorn
 pytest
+pytest-cov
+mongomock
