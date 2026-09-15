@@ -4,14 +4,10 @@ from google import genai
 from dotenv import load_dotenv
 load_dotenv()
 
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
-
 def analyze_complaint(description):
 
     prompt = f"""
-        You are the AI complaint classification engine for Campus Pulse,
+    You are the AI complaint classification engine for Campus Pulse,
     a university student complaint management system.
 
     Analyze the following student complaint:
@@ -206,7 +202,9 @@ def analyze_complaint(description):
     }}
     """
     response = client.interactions.create(
-
+                client = genai.Client(
+            api_key=os.getenv("GEMINI_API_KEY")
+        )
         model="gemini-3.6-flash",
 
         input=prompt,
