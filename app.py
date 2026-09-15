@@ -227,20 +227,25 @@ def complaint_sla(complaint_id):
             status = c.get("status", "Pending")
             created_at = c.get("created_at", datetime.now())
             updated_at = c.get("updated_at", datetime.now())
-
+            
             sla_hours = {
                 "Critical": 2,
                 "High": 4,
                 "Medium": 12,
                 "Low": 24
             }
-
+            
             target_hours = sla_hours.get(priority, 12)
-            end_time = updated_at if status == "Resolved" else datetime.now()
+            
+            if status == "Resolved":
+                end_time = updated_at
+            else:
+                end_time = datetime.now()
+            
             elapsed_seconds = (end_time - created_at).total_seconds()
             elapsed_hours = elapsed_seconds / 3600
             remaining_hours = target_hours - elapsed_hours
-
+            
             if status == "Resolved":
                 sla_status = "Resolved"
             elif remaining_hours <= 0:
@@ -249,9 +254,9 @@ def complaint_sla(complaint_id):
                 sla_status = "At Risk"
             else:
                 sla_status = "On Track"
-
+            
             progress = min(100, max(0, (elapsed_hours / target_hours) * 100))
-
+            
             return jsonify({
                 "success": True,
                 "complaint_id": complaint_id,
@@ -295,7 +300,12 @@ def complaint_sla(complaint_id):
         }
 
         target_hours = sla_hours.get(priority, 12)
-        end_time = row.get("updated_at") or datetime.now() if status == "Resolved" else datetime.now()
+
+        if status == "Resolved":
+            end_time = row.get("updated_at") or datetime.now()
+        else:
+            end_time = datetime.now()
+
         elapsed_seconds = (end_time - created_at).total_seconds()
         elapsed_hours = elapsed_seconds / 3600
         remaining_hours = target_hours - elapsed_hours
