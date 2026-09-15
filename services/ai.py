@@ -266,8 +266,18 @@ def analyze_complaint(description):
         }
     )
 
-    analysis = json.loads(response.output_text)
-
+    try:
+        analysis = json.loads(response.output_text)
+    except (json.JSONDecodeError, TypeError):
+        return {
+            "category": "Other",
+            "department": "General Administration",
+            "location": "Unknown",
+            "severity": 5,
+            "priority": "Medium",
+            "issue": description[:100],
+            "recommended_action": "Review and assign this complaint manually."
+        }
     ALLOWED_CATEGORIES = {
         "Infrastructure",
         "IT & Network",
@@ -295,11 +305,25 @@ def analyze_complaint(description):
         "Student Affairs",
         "General Administration"
     }
-
     if analysis.get("category") not in ALLOWED_CATEGORIES:
         analysis["category"] = "Other"
 
     if analysis.get("department") not in ALLOWED_DEPARTMENTS:
         analysis["department"] = "General Administration"
+
+    allowed_priorities = {
+        "Low",
+        "Medium",
+        "High",
+        "Critical"
+    }
+
+    if analysis.get("priority") not in allowed_priorities:
+        analysis["priority"] = "Medium"
+
+    severity = analysis.get("severity")
+
+    if not isinstance(severity, int) or not 1 <= severity <= 10:
+        analysis["severity"] = 5
 
     return analysis
