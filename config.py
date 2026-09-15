@@ -15,4 +15,4 @@ UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp", "pdf"}
 
-FLASK_SECRET_KEY = os.getenv("FLASK_SECRET_KEY")
+FLASK_SECRET_KEY = os.getenv("FLASK_SECRET_KEY") or "campuspluse-dev-secret-key"
