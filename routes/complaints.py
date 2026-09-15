@@ -15,8 +15,7 @@ mock_complaint_counter = 1
 def allowed_file(filename):
     return (
         "." in filename
-        and filename.rsplit(".", 1)[1].lower()
-        in ALLOWED_EXTENSIONS
+        and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
     )
 
 
@@ -27,12 +26,8 @@ def create_complaint():
 
     try:
         uni_roll_no = session.get("student_roll_no")
-        description = request.form.get("description")
-        is_anonymous = (
-            request.form.get("is_anonymous", "false").lower()
-            == "true"
-        )
-
+        description = request.form.get("description", "").strip()
+        is_anonymous = request.form.get("is_anonymous", "false").lower() == "true"
         evidence = request.files.get("evidence")
 
         if not uni_roll_no:
@@ -47,32 +42,38 @@ def create_complaint():
                 "error": "Complaint description is required."
             }), 400
 
+        if len(description) > 5000:
+            return jsonify({
+                "success": False,
+                "error": "Complaint description is too long."
+            }), 400
+
         evidence_path = None
 
         if evidence and evidence.filename:
             if not allowed_file(evidence.filename):
                 return jsonify({
                     "success": False,
-                    "error": (
-                        "Invalid file type. "
-                        "Allowed: PNG, JPG, JPEG, WEBP, PDF."
-                    )
+                    "error": "Invalid file type. Allowed: PNG, JPG, JPEG, WEBP, PDF."
                 }), 400
 
             original_name = secure_filename(evidence.filename)
+            if not original_name or "." not in original_name:
+                return jsonify({
+                    "success": False,
+                    "error": "Invalid evidence filename."
+                }), 400
+
             extension = original_name.rsplit(".", 1)[1].lower()
             unique_name = f"{uuid4().hex}.{extension}"
             saved_file = UPLOAD_FOLDER / unique_name
-
             evidence.save(saved_file)
             evidence_path = f"uploads/{unique_name}"
 
         try:
             analysis = analyze_complaint(description)
-
         except Exception as ai_error:
             print("Gemini AI analysis failed:", ai_error)
-
             analysis = {
                 "category": "Other",
                 "department": "General Administration",
@@ -80,9 +81,7 @@ def create_complaint():
                 "severity": 5,
                 "priority": "Medium",
                 "issue": description[:100],
-                "recommended_action": (
-                    "Review and assign this complaint manually."
-                )
+                "recommended_action": "Review and assign this complaint manually."
             }
 
         category = analysis["category"]
@@ -96,7 +95,6 @@ def create_complaint():
         if DISABLE_DB:
             complaint_id = mock_complaint_counter
             mock_complaint_counter += 1
-
             mock_complaints[complaint_id] = {
                 "id": complaint_id,
                 "uni_roll_no": uni_roll_no,
@@ -118,19 +116,13 @@ def create_complaint():
             return jsonify({
                 "success": True,
                 "id": complaint_id,
-                "message": (
-                    "Complaint analyzed and "
-                    "submitted successfully (Mock Mode)."
-                ),
+                "message": "Complaint analyzed and submitted successfully (Mock Mode).",
                 "analysis": analysis,
-                "evidence_uploaded": (
-                    evidence_path is not None
-                ),
+                "evidence_uploaded": evidence_path is not None,
                 "mode": "mock"
             })
 
         complaint_id = get_next_id()
-
         complaint = {
             "id": complaint_id,
             "uni_roll_no": uni_roll_no,
@@ -159,7 +151,7 @@ def create_complaint():
             "evidence_uploaded": evidence_path is not None
         })
 
-    except Exception as e:
+    except Exception:
         if saved_file and saved_file.exists():
             try:
                 saved_file.unlink()
@@ -168,5 +160,5 @@ def create_complaint():
 
         return jsonify({
             "success": False,
-            "error": str(e)
+            "error": "Unable to submit the complaint right now."
         }), 500
