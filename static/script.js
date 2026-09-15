@@ -37,7 +37,10 @@ form.addEventListener("submit", async function (event) {
             body: formData
         });
 
-        const data = await response.json();
+        const contentType = response.headers.get("content-type") || "";
+        const data = contentType.includes("application/json")
+            ? await response.json()
+            : { success: false, error: `Server returned HTTP ${response.status}.` };
 
         if (!response.ok || !data.success) {
             throw new Error(data.error || "Something went wrong.");
@@ -139,7 +142,10 @@ async function loadMyComplaints() {
             `/api/complaints?uni_roll_no=${encodeURIComponent(rollNo)}`
         );
 
-        const data = await response.json();
+        const contentType = response.headers.get("content-type") || "";
+        const data = contentType.includes("application/json")
+            ? await response.json()
+            : { success: false, error: `Server returned HTTP ${response.status}.` };
 
         if (!response.ok || !data.success) {
             throw new Error(data.error || "Unable to load complaints.");
@@ -180,7 +186,7 @@ async function loadMyComplaints() {
         myComplaintsList.innerHTML = `
             <div class="empty-complaints">
                 <strong>Unable to load complaints</strong>
-                <p>Please try again.</p>
+                <p>${escapeHtml(error.message || "Please try again.")}</p>
             </div>
         `;
     } finally {
