@@ -60,17 +60,11 @@ def create_complaint():
                 }), 400
 
             original_name = secure_filename(evidence.filename)
-
-            extension = (
-                original_name.rsplit(".", 1)[1].lower()
-            )
-
+            extension = original_name.rsplit(".", 1)[1].lower()
             unique_name = f"{uuid4().hex}.{extension}"
-
             saved_file = UPLOAD_FOLDER / unique_name
 
             evidence.save(saved_file)
-
             evidence_path = f"uploads/{unique_name}"
 
         try:

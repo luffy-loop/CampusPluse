@@ -2,6 +2,7 @@ from flask import Blueprint, request, render_template, redirect, url_for, sessio
 
 auth_bp = Blueprint("auth", __name__)
 
+
 @auth_bp.route("/student/login", methods=["GET", "POST"])
 def student_login():
     if request.method == "GET":
@@ -17,3 +18,9 @@ def student_login():
 
     session["student_roll_no"] = roll_no
     return redirect(url_for("student_portal"))
+
+
+@auth_bp.route("/student/logout")
+def student_logout():
+    session.pop("student_roll_no", None)
+    return redirect(url_for("auth.student_login"))
