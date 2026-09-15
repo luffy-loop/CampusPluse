@@ -1,5 +1,7 @@
 # CampusPluse
 
+[![Tests](https://github.com/luffy-loop/CampusPluse/actions/workflows/tests.yml/badge.svg)](https://github.com/luffy-loop/CampusPluse/actions/workflows/tests.yml)
+
 AI-powered campus complaint management and intelligence system built with Flask, MongoDB, and Gemini.
 
 ## Live Demo
@@ -8,6 +10,15 @@ AI-powered campus complaint management and intelligence system built with Flask,
 https://campuspluse-z1ih.onrender.com/
 
 CampusPluse provides separate student and administrator workflows for reporting, tracking, and managing campus complaints.
+
+## Quality Signals
+
+- **Tests:** 31 automated tests
+- **Test Coverage:** 76%
+- **CI:** GitHub Actions
+- **Dependency Security:** `pip-audit`
+- **Deployment Health:** `/health` endpoint with scheduled production checks
+- **API Documentation:** `openapi.yaml`
 
 ## Overview
 
@@ -154,6 +165,12 @@ Inspect network connectivity and restore service.
 - CSS
 - JavaScript
 
+### Testing
+
+- Pytest
+- pytest-cov
+- mongomock
+
 ### Deployment
 
 - Render
@@ -190,6 +207,15 @@ CampusPluse/
 │   ├── student.html
 │   ├── student_login.html
 │   └── track.html
+├── tests/
+│   ├── test_admin.py
+│   ├── test_ai.py
+│   ├── test_auth.py
+│   ├── test_complaints.py
+│   ├── test_health.py
+│   ├── test_mongodb.py
+│   └── test_tracking.py
+├── openapi.yaml
 ├── requirements.txt
 └── .gitignore
 ```
@@ -220,7 +246,11 @@ app.py
 
 This structure keeps authentication, complaint handling, administration, tracking, and AI processing organized into separate modules.
 
-## API Overview
+## API Documentation
+
+The complete API specification is available in [`openapi.yaml`](openapi.yaml) and can be imported into Swagger UI, Postman, or other OpenAPI-compatible tools.
+
+### API Overview
 
 ### Student Authentication
 
@@ -259,6 +289,22 @@ GET  /api/admin/briefing
 PUT  /api/admin/complaints/<complaint_id>/status
 GET  /api/admin/complaints/<complaint_id>/sla
 ```
+
+## Testing
+
+Run the full test suite locally:
+
+```bash
+python -m pytest -v
+```
+
+Run tests with coverage:
+
+```bash
+python -m pytest -v --cov=. --cov-report=term-missing
+```
+
+GitHub Actions runs the test suite with coverage on pushes and pull requests to `main`. Dependency vulnerabilities are checked separately with `pip-audit`.
 
 ## Environment Variables
 
@@ -325,6 +371,8 @@ CampusPluse is deployed using Render.
 **Live Demo:**  
 https://campuspluse-z1ih.onrender.com/
 
+The deployment exposes `/health` for application/database health checks. Production health is checked automatically by GitHub Actions on a scheduled basis.
+
 Production deployment requires the appropriate environment variables to be configured in the hosting platform.
 
 ## Security
@@ -338,8 +386,7 @@ The project includes:
 - File extension validation for uploaded evidence
 - Secure filename handling
 - Constant-time comparison for administrator credentials
-
-Additional production hardening is planned.
+- Automated dependency vulnerability scanning
 
 ## Current Status
 
@@ -354,18 +401,18 @@ CampusPluse is a working project prototype demonstrating:
 - AI-generated administrative briefings
 - Complaint SLA monitoring
 - Modular Flask route organization
+- Automated testing and CI
+- Deployment health monitoring
+- OpenAPI API documentation
 
 ## Roadmap
 
 Planned improvements include:
 
-- Automated test coverage
-- Continuous integration with GitHub Actions
 - Stronger AI response validation
 - Improved production security controls
-- Screenshots and demo media
 - Further authentication hardening
-- Improved deployment observability
+- Improved observability and error monitoring
 
 ## License
 
