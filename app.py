@@ -67,6 +67,17 @@ def allowed_file(filename):
 def home():
     return render_template("index.html")
 
+@app.route("/health")
+def health():
+    if DISABLE_DB:
+        return jsonify({"status": "ok", "database": "mock"})
+
+    try:
+        get_complaints().database.client.admin.command("ping")
+        return jsonify({"status": "ok", "database": "connected"})
+    except Exception:
+        return jsonify({"status": "degraded", "database": "unavailable"}), 503
+
 @app.route("/student")
 def student_portal():
     if not session.get("student_roll_no"):
