@@ -10,6 +10,9 @@ const message =
 const complaintResult =
     document.getElementById("complaintResult");
 
+const statusValue =
+    document.getElementById("statusValue");
+
 
 searchBtn.addEventListener(
     "click",
@@ -85,11 +88,6 @@ async function loadComplaint() {
 
         }
 
-
-        /*
-         * The API may return multiple complaints.
-         * For now we display the most recent one.
-         */
 
         const complaints =
             data.complaints || [];
@@ -220,82 +218,22 @@ function updateStatus(
     status
 ) {
 
-    const pending =
-        document.getElementById(
-            "statusPending"
-        );
-
-    const progress =
-        document.getElementById(
-            "statusProgress"
-        );
-
-    const resolved =
-        document.getElementById(
-            "statusResolved"
-        );
-
-
-    pending.className =
-        "status-step";
-
-
-    progress.className =
-        "status-step";
-
-
-    resolved.className =
-        "status-step";
-
+    if (!statusValue) {
+        return;
+    }
 
     const current =
-        String(status || "")
-            .toLowerCase()
-            .replace("_", " ");
+        String(status || "Pending");
 
+    statusValue.className =
+        "status-value";
 
-    if (current === "pending") {
+    statusValue.classList.add(
+        current.toLowerCase().replaceAll(" ", "-")
+    );
 
-        pending.classList.add(
-            "active"
-        );
-
-    }
-
-
-    else if (
-        current === "in progress"
-    ) {
-
-        pending.classList.add(
-            "complete"
-        );
-
-        progress.classList.add(
-            "active"
-        );
-
-    }
-
-
-    else if (
-        current === "resolved"
-    ) {
-
-        pending.classList.add(
-            "complete"
-        );
-
-        progress.classList.add(
-            "complete"
-        );
-
-        resolved.classList.add(
-            "complete"
-        );
-
-    }
-
+    statusValue.innerText =
+        current;
 }
 
 
