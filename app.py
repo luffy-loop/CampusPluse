@@ -8,6 +8,7 @@ import hmac
 from datetime import datetime
 from mongodb import get_complaints, get_next_id
 from services.ai import analyze_complaint
+from routes.complaints import complaints_bp
 
 from config import (
     DISABLE_DB,
@@ -18,6 +19,7 @@ from config import (
 
 app = Flask(__name__)
 app.register_blueprint(auth_bp)
+app.register_blueprint(complaints_bp)
 app.secret_key = FLASK_SECRET_KEY
 
 def admin_auth():
@@ -66,10 +68,6 @@ def student_portal():
         return redirect(url_for("student_login"))
 
     return render_template("student.html")
-
-# ============================================================
-# SUBMIT COMPLAINT
-# ============================================================
 
 # ============================================================
 # SUBMIT COMPLAINT
