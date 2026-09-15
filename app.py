@@ -26,6 +26,10 @@ app.register_blueprint(complaints_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(tracking_bp)
 app.secret_key = FLASK_SECRET_KEY
+app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["SESSION_COOKIE_SECURE"] = os.getenv("RENDER", "").lower() == "true"
 
 def admin_auth():
     if request.path == "/admin/login":
