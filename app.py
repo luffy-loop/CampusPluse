@@ -9,6 +9,7 @@ from datetime import datetime
 from mongodb import get_complaints, get_next_id
 from services.ai import analyze_complaint
 from routes.complaints import complaints_bp
+from routes.admin import admin_bp
 
 from config import (
     DISABLE_DB,
@@ -20,6 +21,7 @@ from config import (
 app = Flask(__name__)
 app.register_blueprint(auth_bp)
 app.register_blueprint(complaints_bp)
+app.register_blueprint(admin_bp)
 app.secret_key = FLASK_SECRET_KEY
 
 def admin_auth():
@@ -33,8 +35,7 @@ def admin_auth():
                     "success": False,
                     "error": "Admin authentication required."
                 }), 401
-            return redirect(url_for("admin_login"))
-
+                return redirect(url_for("admin.admin_login"))
     return None
 
 @app.before_request
@@ -70,233 +71,6 @@ def student_portal():
     return render_template("student.html")
 
 # ============================================================
-# SUBMIT COMPLAINT
-# ============================================================
-
-@app.route("/api/complaints", methods=["POST"])
-def create_complaint():
-
-    saved_file = None
-    global mock_complaint_counter
-
-    try:
-
-        # -----------------------------
-        # Get form data
-        # -----------------------------
-
-        uni_roll_no = session.get("student_roll_no")
-        description = request.form.get("description")
-        is_anonymous = (
-            request.form.get("is_anonymous", "false").lower()
-            == "true"
-        )
-
-        evidence = request.files.get("evidence")
-
-
-        # -----------------------------
-        # Validate input
-        # -----------------------------
-
-        if not uni_roll_no:
-
-            return jsonify({
-                "success": False,
-                "error": "University roll number is required."
-            }), 400
-
-
-        if not description:
-
-            return jsonify({
-                "success": False,
-                "error": "Complaint description is required."
-            }), 400
-
-
-        # -----------------------------
-        # Handle evidence file
-        # -----------------------------
-
-        evidence_path = None
-
-        if evidence and evidence.filename:
-
-            if not allowed_file(evidence.filename):
-
-                return jsonify({
-                    "success": False,
-                    "error": (
-                        "Invalid file type. "
-                        "Allowed: PNG, JPG, JPEG, WEBP, PDF."
-                    )
-                }), 400
-
-
-            original_name = secure_filename(
-                evidence.filename
-            )
-
-            extension = (
-                original_name.rsplit(".", 1)[1].lower()
-            )
-
-
-            unique_name = (
-                f"{uuid4().hex}.{extension}"
-            )
-
-
-            saved_file = (
-                UPLOAD_FOLDER / unique_name
-            )
-
-
-            evidence.save(saved_file)
-
-
-            evidence_path = (
-                f"uploads/{unique_name}"
-            )
-
-
-        # -----------------------------
-        # AI ANALYSIS
-               # -----------------------------
-        # AI ANALYSIS
-        # -----------------------------
-
-        try:
-            analysis = analyze_complaint(description)
-
-        except Exception as ai_error:
-            print("Gemini AI analysis failed:", ai_error)
-
-            # Fallback analysis when Gemini quota/API is unavailable
-            analysis = {
-                "category": "Other",
-                "department": "General Administration",
-                "location": "Unknown",
-                "severity": 5,
-                "priority": "Medium",
-                "issue": description[:100],
-                "recommended_action": "Review and assign this complaint manually."
-            }
-
-
-        # -----------------------------
-        # Extract AI fields
-        # -----------------------------
-
-        category = analysis["category"]
-        department = analysis["department"]
-        location = analysis["location"]
-        severity = analysis["severity"]
-        priority = analysis["priority"]
-        issue = analysis["issue"]
-        recommended_action = analysis[
-            "recommended_action"
-        ]
-
-
-        # =============================
-        # MOCK MODE (DB DISABLED)
-        # =============================
-        
-        if DISABLE_DB:
-            complaint_id = mock_complaint_counter
-            mock_complaint_counter += 1
-            
-            mock_complaints[complaint_id] = {
-                "id": complaint_id,
-                "uni_roll_no": uni_roll_no,
-                "description": description,
-                "category": category,
-                "department": department,
-                "location": location,
-                "severity": severity,
-                "priority": priority,
-                "issue_group": issue,
-                "recommended_action": recommended_action,
-                "is_anonymous": is_anonymous,
-                "evidence_path": evidence_path,
-                "status": "Pending",
-                "created_at": datetime.now(),
-                "updated_at": datetime.now()
-            }
-            
-            return jsonify({
-                "success": True,
-                "id": complaint_id,
-                "message": (
-                    "Complaint analyzed and "
-                    "submitted successfully (Mock Mode)."
-                ),
-                "analysis": analysis,
-                "evidence_uploaded": (
-                    evidence_path is not None
-                ),
-                "mode": "mock"
-            })
-
-
-        # =============================
-        # DATABASE MODE
-        # =============================
-
-        complaint_id = get_next_id()
-
-        complaint = {
-            "id": complaint_id,
-            "uni_roll_no": uni_roll_no,
-            "description": description,
-            "category": category,
-            "department": department,
-            "location": location,
-            "severity": severity,
-            "priority": priority,
-            "issue_group": issue,
-            "recommended_action": recommended_action,
-            "is_anonymous": is_anonymous,
-            "evidence_path": evidence_path,
-            "status": "Pending",
-            "created_at": datetime.now(),
-            "updated_at": datetime.now()
-        }
-
-        get_complaints().insert_one(complaint)
-
-        return jsonify({
-            "success": True,
-            "id": complaint_id,
-            "message": "Complaint analyzed and submitted successfully.",
-            "analysis": analysis,
-            "evidence_uploaded": evidence_path is not None
-        })
-
-    except Exception as e:
-
-
-        # Remove uploaded file if database
-        # insertion failed
-
-        if saved_file and saved_file.exists():
-
-            try:
-                saved_file.unlink()
-            except Exception:
-                pass
-
-
-        return jsonify({
-
-            "success": False,
-
-            "error": str(e)
-
-        }), 500
-# ============================================================
 # STUDENT AUTHENTICATION
 # ============================================================
 
@@ -307,35 +81,6 @@ def student_logout():
 
     return redirect(url_for("student_login"))
 
-# ============================================================
-# ADMIN AUTHENTICATION
-# ============================================================
-
-@app.route("/admin/login", methods=["GET", "POST"])
-def admin_login():
-
-    if request.method == "GET":
-        return render_template("admin_login.html")
-
-    username = request.form.get("username", "")
-    password = request.form.get("password", "")
-
-    admin_username = os.getenv("ADMIN_USERNAME", "")
-    admin_password = os.getenv("ADMIN_PASSWORD", "")
-
-    if (
-        hmac.compare_digest(username, admin_username)
-        and hmac.compare_digest(password, admin_password)
-    ):
-        session["admin"] = True
-        return redirect(url_for("admin"))
-
-    return render_template(
-        "admin_login.html",
-        error="Invalid username or password."
-    ), 401
-
-
 @app.route("/admin/logout")
 def admin_logout():
 
@@ -343,10 +88,6 @@ def admin_logout():
 
     return redirect(url_for("admin_login"))
 
-
-# ============================================================
-# ADMIN DASHBOARD
-# ============================================================
 # ============================================================
 # ADMIN DASHBOARD
 # ============================================================
