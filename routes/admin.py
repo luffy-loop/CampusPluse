@@ -16,14 +16,16 @@ def admin_login():
     if request.method == "GET":
         return render_template("admin_login.html")
 
-    username = request.form.get("username", "")
+    username = request.form.get("username", "").strip()
     password = request.form.get("password", "")
 
-    admin_username = os.getenv("ADMIN_USERNAME", "")
+    admin_username = os.getenv("ADMIN_USERNAME", "").strip()
     admin_password = os.getenv("ADMIN_PASSWORD", "")
 
     if (
-        hmac.compare_digest(username, admin_username)
+        admin_username
+        and admin_password
+        and hmac.compare_digest(username, admin_username)
         and hmac.compare_digest(password, admin_password)
     ):
         session["admin"] = True
@@ -121,22 +123,12 @@ def admin_dashboard():
             })
 
         complaints_col = get_complaints()
-
         total = complaints_col.count_documents({})
-
-        pending = complaints_col.count_documents({
-            "status": "Pending"
-        })
-
+        pending = complaints_col.count_documents({"status": "Pending"})
         high_priority = complaints_col.count_documents({
-            "priority": {
-                "$in": ["High", "Critical"]
-            }
+            "priority": {"$in": ["High", "Critical"]}
         })
-
-        resolved = complaints_col.count_documents({
-            "status": "Resolved"
-        })
+        resolved = complaints_col.count_documents({"status": "Resolved"})
 
         departments = [
             {
@@ -150,11 +142,7 @@ def admin_dashboard():
                         "count": {"$sum": 1}
                     }
                 },
-                {
-                    "$sort": {
-                        "count": -1
-                    }
-                }
+                {"$sort": {"count": -1}}
             ])
         ]
 
@@ -224,7 +212,7 @@ def admin_dashboard():
 )
 def update_complaint_status(complaint_id):
     try:
-        data = request.get_json()
+        data = request.get_json() or {}
         new_status = data.get("status")
 
         allowed_statuses = {
