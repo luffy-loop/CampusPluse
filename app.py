@@ -1,3 +1,4 @@
+from routes.auth import auth_bp
 from flask import Flask, jsonify, request, render_template, session, redirect, url_for
 import os
 from werkzeug.utils import secure_filename
@@ -16,6 +17,7 @@ from config import (
 )
 
 app = Flask(__name__)
+app.register_blueprint(auth_bp)
 app.secret_key = FLASK_SECRET_KEY
 
 def admin_auth():
@@ -299,24 +301,6 @@ def create_complaint():
 # ============================================================
 # STUDENT AUTHENTICATION
 # ============================================================
-
-@app.route("/student/login", methods=["GET", "POST"])
-def student_login():
-
-    if request.method == "GET":
-        return render_template("student_login.html")
-
-    roll_no = request.form.get("roll_no", "").strip()
-
-    if not roll_no:
-        return render_template(
-            "student_login.html",
-            error="University roll number is required."
-        ), 400
-
-    session["student_roll_no"] = roll_no
-    return redirect(url_for("student_portal"))
-
 
 @app.route("/student/logout")
 def student_logout():
