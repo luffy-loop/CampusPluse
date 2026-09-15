@@ -201,10 +201,11 @@ def analyze_complaint(description):
         "recommended_action": "..."
     }}
     """
+    client = genai.Client(
+        api_key=os.getenv("GEMINI_API_KEY")
+    )
+
     response = client.interactions.create(
-                client = genai.Client(
-            api_key=os.getenv("GEMINI_API_KEY")
-        )
         model="gemini-3.6-flash",
 
         input=prompt,
