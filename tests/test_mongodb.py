@@ -3,12 +3,17 @@ import mongomock
 import mongodb
 
 
-def test_mongodb_creates_expected_indexes(monkeypatch):
+def setup_db(monkeypatch):
     fake_client = mongomock.MongoClient()
+    monkeypatch.setenv("MONGODB_URI", "mongodb://test")
     monkeypatch.setattr(mongodb, "MongoClient", lambda *args, **kwargs: fake_client)
     mongodb.client = None
     mongodb.db = None
+    return fake_client
 
+
+def test_mongodb_creates_expected_indexes(monkeypatch):
+    setup_db(monkeypatch)
     db = mongodb.get_db()
     indexes = db["complaints"].index_information()
 
@@ -18,21 +23,14 @@ def test_mongodb_creates_expected_indexes(monkeypatch):
 
 
 def test_mongodb_generates_incrementing_ids(monkeypatch):
-    fake_client = mongomock.MongoClient()
-    monkeypatch.setattr(mongodb, "MongoClient", lambda *args, **kwargs: fake_client)
-    mongodb.client = None
-    mongodb.db = None
+    setup_db(monkeypatch)
 
     assert mongodb.get_next_id() == 1
     assert mongodb.get_next_id() == 2
 
 
 def test_mongodb_stores_and_filters_complaints(monkeypatch):
-    fake_client = mongomock.MongoClient()
-    monkeypatch.setattr(mongodb, "MongoClient", lambda *args, **kwargs: fake_client)
-    mongodb.client = None
-    mongodb.db = None
-
+    setup_db(monkeypatch)
     complaints = mongodb.get_complaints()
     complaints.insert_many([
         {"id": 1, "uni_roll_no": "A001", "status": "Pending"},
