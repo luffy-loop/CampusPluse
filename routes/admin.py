@@ -28,6 +28,7 @@ def admin_login():
         and hmac.compare_digest(username, admin_username)
         and hmac.compare_digest(password, admin_password)
     ):
+        session.clear()
         session["admin"] = True
         return redirect(url_for("admin.admin"))
 
@@ -157,14 +158,17 @@ def admin_dashboard():
             "complaints": complaints
         })
 
-    except Exception as e:
-        return jsonify({"success": False, "error": str(e)}), 500
+    except Exception:
+        return jsonify({
+            "success": False,
+            "error": "Unable to load the admin dashboard right now."
+        }), 500
 
 
 @admin_bp.route("/api/admin/complaints/<int:complaint_id>/status", methods=["PUT"])
 def update_complaint_status(complaint_id):
     try:
-        data = request.get_json() or {}
+        data = request.get_json(silent=True) or {}
         new_status = data.get("status")
         allowed_statuses = {"Pending", "In Progress", "Resolved"}
 
@@ -199,8 +203,11 @@ def update_complaint_status(complaint_id):
             "message": "Complaint status updated successfully."
         })
 
-    except Exception as e:
-        return jsonify({"success": False, "error": str(e)}), 500
+    except Exception:
+        return jsonify({
+            "success": False,
+            "error": "Unable to update the complaint status right now."
+        }), 500
 
 
 @admin_bp.route("/api/admin/signals")
@@ -260,5 +267,8 @@ def campus_signals():
 
         return jsonify({"success": True, "signals": signals})
 
-    except Exception as e:
-        return jsonify({"success": False, "error": str(e)}), 500
+    except Exception:
+        return jsonify({
+            "success": False,
+            "error": "Unable to load campus signals right now."
+        }), 500
