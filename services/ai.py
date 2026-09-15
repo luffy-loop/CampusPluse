@@ -269,7 +269,7 @@ def analyze_complaint(description):
             "recommended_action": "Review and assign this complaint manually."
         }
 
-    ALLOWED_CATEGORIES = {
+    allowed_categories = {
         "Infrastructure",
         "IT & Network",
         "Academics",
@@ -283,7 +283,7 @@ def analyze_complaint(description):
         "Other"
     }
 
-    ALLOWED_DEPARTMENTS = {
+    allowed_departments = {
         "Facilities & Maintenance",
         "IT & Network Services",
         "Academic Affairs",
@@ -297,10 +297,10 @@ def analyze_complaint(description):
         "General Administration"
     }
 
-    if analysis.get("category") not in ALLOWED_CATEGORIES:
+    if analysis.get("category") not in allowed_categories:
         analysis["category"] = "Other"
 
-    if analysis.get("department") not in ALLOWED_DEPARTMENTS:
+    if analysis.get("department") not in allowed_departments:
         analysis["department"] = "General Administration"
 
     allowed_priorities = {
