@@ -124,7 +124,16 @@ def admin_briefing():
         if not rows:
             return jsonify({
                 "success": True,
-                "briefing": "No complaints have been submitted yet."
+                "briefing": {
+                    "headline": "No complaints yet",
+                    "summary": "No complaints have been submitted yet.",
+                    "top_issue": "N/A",
+                    "affected_location": "N/A",
+                    "affected_department": "N/A",
+                    "recommended_action": "Monitor for incoming complaints.",
+                    "urgency": "Low"
+                },
+                "mode": "empty"
             })
 
         complaints = []
@@ -216,6 +225,25 @@ Return ONLY valid JSON in this format:
         )
 
         briefing = json.loads(response.output_text)
+
+        allowed_urgencies = {"Low", "Medium", "High", "Critical"}
+        required_fields = {
+            "headline",
+            "summary",
+            "top_issue",
+            "affected_location",
+            "affected_department",
+            "recommended_action",
+            "urgency"
+        }
+
+        if (
+            not isinstance(briefing, dict)
+            or not required_fields.issubset(briefing)
+            or any(not isinstance(briefing[field], str) for field in required_fields)
+            or briefing["urgency"] not in allowed_urgencies
+        ):
+            raise ValueError("Invalid AI briefing response")
 
         return jsonify({
             "success": True,
