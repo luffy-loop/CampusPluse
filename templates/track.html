@@ -19,13 +19,11 @@
 
 </head>
 
-
 <body>
 
     <main class="track-page">
 
         <section class="track-card">
-
 
             <a
                 href="/"
@@ -34,29 +32,22 @@
                 ← Back to Complaint Centre
             </a>
 
-
             <div class="brand-mark">
                 CP
             </div>
-
 
             <p class="eyebrow">
                 CAMPUS PULSE
             </p>
 
-
             <h1>
                 Track Your Complaint
             </h1>
-
 
             <p class="subtitle">
                 Enter your university roll number to view
                 your complaint status and progress.
             </p>
-
-
-            <!-- SEARCH -->
 
             <div class="search-box">
 
@@ -75,16 +66,10 @@
 
             </div>
 
-
-            <!-- ERROR / MESSAGE -->
-
             <div
                 id="message"
                 class="message"
             ></div>
-
-
-            <!-- RESULT -->
 
             <div
                 id="complaintResult"
@@ -105,122 +90,44 @@
 
                 </div>
 
-
-                <!-- STATUS -->
-
-                <div class="status-track">
-
-                    <div
-                        id="statusPending"
-                        class="status-step"
-                    >
-                        Pending
-                    </div>
-
-                    <div
-                        id="statusProgress"
-                        class="status-step"
-                    >
-                        In Progress
-                    </div>
-
-                    <div
-                        id="statusResolved"
-                        class="status-step"
-                    >
-                        Resolved
-                    </div>
-
-                </div>
-
-
-                <!-- DETAILS -->
+                <div
+                    id="statusValue"
+                    class="status-value"
+                ></div>
 
                 <div class="details-grid">
 
-
                     <div class="detail">
-
-                        <span>
-                            Issue
-                        </span>
-
-                        <strong id="issue">
-                            —
-                        </strong>
-
+                        <span>Issue</span>
+                        <strong id="issue">—</strong>
                     </div>
 
-
                     <div class="detail">
-
-                        <span>
-                            Category
-                        </span>
-
-                        <strong id="category">
-                            —
-                        </strong>
-
+                        <span>Category</span>
+                        <strong id="category">—</strong>
                     </div>
 
-
                     <div class="detail">
-
-                        <span>
-                            Department
-                        </span>
-
-                        <strong id="department">
-                            —
-                        </strong>
-
+                        <span>Department</span>
+                        <strong id="department">—</strong>
                     </div>
 
-
                     <div class="detail">
-
-                        <span>
-                            Location
-                        </span>
-
-                        <strong id="location">
-                            —
-                        </strong>
-
+                        <span>Location</span>
+                        <strong id="location">—</strong>
                     </div>
 
-
                     <div class="detail">
-
-                        <span>
-                            Priority
-                        </span>
-
-                        <strong id="priority">
-                            —
-                        </strong>
-
+                        <span>Priority</span>
+                        <strong id="priority">—</strong>
                     </div>
 
-
                     <div class="detail">
-
-                        <span>
-                            Last Updated
-                        </span>
-
-                        <strong id="updatedAt">
-                            —
-                        </strong>
-
+                        <span>Last Updated</span>
+                        <strong id="updatedAt">—</strong>
                     </div>
-
 
                 </div>
-
-
-                <!-- RECOMMENDATION -->
 
                 <div class="recommendation">
 
@@ -234,13 +141,11 @@
 
                 </div>
 
-
             </div>
 
         </section>
 
     </main>
-
 
     <script
         src="{{ url_for('static', filename='track.js') }}"

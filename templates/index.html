@@ -55,8 +55,7 @@
 
             <div class="portal-grid">
 
-                <a href="{{ url_for('student_login') }}" class="portal-card student-card">
-
+<a href="{{ url_for('auth.student_login') }}" class="portal-card student-card">
                     <div class="portal-icon">
                         →
                     </div>
@@ -83,7 +82,7 @@
                 </a>
 
 
-                <a href="{{ url_for('track') }}" class="portal-card track-card">
+                <a href="{{ url_for('tracking.track') }}" class="portal-card track-card">
 
                     <div class="portal-icon">
                         ✓
@@ -110,8 +109,7 @@
 
                 </a>
 
-
-                <a href="{{ url_for('admin_login') }}" class="portal-card admin-card">
+<a href="{{ url_for('admin.admin_login') }}" class="portal-card admin-card">                
 
                     <div class="portal-icon">
                         ◇

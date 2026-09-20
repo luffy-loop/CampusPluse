@@ -1,0 +1,166 @@
+openapi: 3.0.3
+info:
+  title: CampusPluse API
+  version: 1.0.0
+  description: API for student complaints, tracking, administration, AI analysis, and campus signals.
+servers:
+  - url: https://campuspluse-z1ih.onrender.com
+paths:
+  /health:
+    get:
+      summary: Deployment health check
+      responses:
+        '200':
+          description: Application and database are healthy or running in mock mode.
+        '503':
+          description: Application is running but the database is unavailable.
+  /student/login:
+    post:
+      summary: Student login
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [roll_no]
+              properties:
+                roll_no:
+                  type: string
+      responses:
+        '302':
+          description: Redirects to the student portal.
+        '400':
+          description: Invalid or missing roll number.
+  /api/complaints:
+    post:
+      summary: Submit a complaint
+      security: [{ studentSession: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [description]
+              properties:
+                description:
+                  type: string
+                  maxLength: 5000
+                is_anonymous:
+                  type: boolean
+                evidence:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Complaint submitted successfully.
+        '400':
+          description: Validation error.
+        '500':
+          description: Submission failure.
+    get:
+      summary: List complaints for the logged-in student
+      security: [{ studentSession: [] }]
+      responses:
+        '200':
+          description: Student complaint history.
+        '400':
+          description: Student session is missing.
+  /api/complaints/{complaint_id}:
+    get:
+      summary: Get one complaint belonging to the logged-in student
+      security: [{ studentSession: [] }]
+      parameters:
+        - in: path
+          name: complaint_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Complaint details.
+        '404':
+          description: Complaint not found.
+  /api/admin/dashboard:
+    get:
+      summary: Get admin dashboard data
+      security: [{ adminSession: [] }]
+      responses:
+        '200':
+          description: Dashboard statistics and recent complaints.
+        '401':
+          description: Admin authentication required.
+  /api/admin/complaints/{complaint_id}/status:
+    put:
+      summary: Update complaint status
+      security: [{ adminSession: [] }]
+      parameters:
+        - in: path
+          name: complaint_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+                  enum: [Pending, In Progress, Resolved]
+      responses:
+        '200':
+          description: Status updated.
+        '400':
+          description: Invalid status.
+        '404':
+          description: Complaint not found.
+        '401':
+          description: Admin authentication required.
+  /api/admin/complaints/{complaint_id}/sla:
+    get:
+      summary: Calculate complaint SLA
+      security: [{ adminSession: [] }]
+      parameters:
+        - in: path
+          name: complaint_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: SLA calculation.
+        '404':
+          description: Complaint not found.
+  /api/admin/signals:
+    get:
+      summary: Get recurring campus complaint signals
+      security: [{ adminSession: [] }]
+      responses:
+        '200':
+          description: Aggregated campus signals.
+        '401':
+          description: Admin authentication required.
+  /api/admin/briefing:
+    get:
+      summary: Generate an AI admin briefing
+      security: [{ adminSession: [] }]
+      responses:
+        '200':
+          description: AI-generated operational briefing.
+        '500':
+          description: AI briefing unavailable.
+components:
+  securitySchemes:
+    studentSession:
+      type: apiKey
+      in: cookie
+      name: session
+    adminSession:
+      type: apiKey
+      in: cookie
+      name: session

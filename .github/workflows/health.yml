@@ -1,0 +1,13 @@
+name: Deployment Health
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/30 * * * *"
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check production health
+        run: curl --fail --silent --show-error --max-time 20 https://campuspluse-z1ih.onrender.com/health

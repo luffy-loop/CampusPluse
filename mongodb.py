@@ -13,9 +13,16 @@ def get_db():
 
     uri = os.getenv("MONGODB_URI")
     if not uri:
-        raise Exception("MONGODB_URI is not configured.")
+        raise RuntimeError("MONGODB_URI is not configured.")
 
-    client = MongoClient(uri, serverSelectionTimeoutMS=5000)
+    client = MongoClient(
+        uri,
+        serverSelectionTimeoutMS=5000,
+        connectTimeoutMS=5000,
+        socketTimeoutMS=10000,
+        maxPoolSize=20,
+        minPoolSize=1
+    )
     client.admin.command("ping")
     db = client[os.getenv("MONGODB_DB", "campuspluse")]
 
